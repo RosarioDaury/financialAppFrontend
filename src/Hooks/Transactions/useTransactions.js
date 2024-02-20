@@ -7,7 +7,6 @@ const SERVICE = new TransactionServices();
 const useTransactions = ({filters = {}}) => {
     const { User, IsAuth } = useContext(AuthContext);
     const [Transactions, setTransactions] = useState([]);
-    const [Total, setTotal] = useState()
     const [error, setError] = useState(null)
 
     const fetchTransactions = useCallback (async ({filters}) => {
@@ -19,7 +18,6 @@ const useTransactions = ({filters = {}}) => {
         } catch(e) {
             console.log(e)
             setTransactions([])
-            setTotal(0)
             setError(e)
         }
     }, 
@@ -32,7 +30,6 @@ const useTransactions = ({filters = {}}) => {
 
     return {
         Transactions,
-        Total,
         error
     }
 

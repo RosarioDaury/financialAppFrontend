@@ -5,8 +5,8 @@ import { FontSizes } from '../../Styles/GlobalStyles';
 export const Styles = StyleSheet.create({
     Header: {
         backgroundColor: StandardTheme.DarkBlue,
-        paddingVertical: 40,
-        paddingHorizontal: 30,
+        paddingVertical: 70,
+        paddingHorizontal: 25,
         gap: 20,
         position: 'relative',
         alignItems: 'center'
@@ -14,9 +14,9 @@ export const Styles = StyleSheet.create({
     username: {
         display: 'flex',
         flexDirection: 'row',
-        justifyContent: 'space-between',
+        justifyContent: 'flex-end',
         alignItems: 'center',
-        width: '95%',
+        width: '100%',
         user: {
             alignItems: 'center',
             gap: 5,
@@ -26,7 +26,8 @@ export const Styles = StyleSheet.create({
         },
         name: {
             fontSize: FontSizes.small,
-            color: StandardTheme.White
+            color: StandardTheme.White,
+            fontWeight: 'bold'
         }
     },
     lastestIncome: {

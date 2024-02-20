@@ -6,7 +6,7 @@ const Styles = (color) => StyleSheet.create({
     Container: {
         backgroundColor: StandardTheme.White,
         width: '85%',
-        paddingVertical: 20,
+        paddingVertical: 15,
         paddingHorizontal: 20,
         flexDirection: 'row',
         borderRadius: 15,
@@ -27,7 +27,8 @@ const Styles = (color) => StyleSheet.create({
     },
     Name:{
         color: color,
-        fontSize: FontSizes.medium
+        fontSize: FontSizes.medium,
+        fontWeight: 'bold'
     },
     Remaining: {
         color: StandardTheme.Grey,
@@ -35,7 +36,7 @@ const Styles = (color) => StyleSheet.create({
     },
     TotalContainer: {
         display: 'flex',
-        alignItems: "flex-end"
+        alignItems: "flex-end",
     },  
     Total: {
         fontSize: FontSizes.medium

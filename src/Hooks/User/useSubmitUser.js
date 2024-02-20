@@ -1,7 +1,7 @@
 import { useCallback, useState } from "react";
-import ApiService from "../../Services/ApiServices";
+import UserServices from "../../Services/UserServices";
 import { Alert } from "react-native";
-const Service = new ApiService()
+const Service = new UserServices()
 const useSubmitUser = () => {
     const [Error, setError] = useState(null)
     const [Success, setSuccess] = useState(null)

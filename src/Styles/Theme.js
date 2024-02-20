@@ -6,6 +6,6 @@ export const StandardTheme = {
     Red: '#D21404',
     Green: '#03C04A',
     White: 'white',
-    Golden: '#FFD700',
+    Golden: '#FFC72C',
     Yellow: '#FAFA33'
 }

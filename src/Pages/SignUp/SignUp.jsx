@@ -19,18 +19,17 @@ const defaultBody = {
         username: "",
         password: "",
         passwordConfirm: "",
-        first_name: "",
-        last_name: "",
+        firstName: "",
+        lastName: "",
         email: "",
-        Account_type: 1,
-        Budget: 0,
-        Limit: 0
+        userType: 1,
+        balance: 0,
     }
 
 const SignUp = ({navigation}) => {
     const [Body, setBody] = useState(defaultBody);
-    const {accountTypes} = useAccountTypes()
-    const {createUser, Error, Success} = useSubmitUser
+    const {accountTypes} = useAccountTypes();
+    const {createUser, Error, Success} = useSubmitUser();
 
     const isFocused = useIsFocused()
 
@@ -58,7 +57,7 @@ const SignUp = ({navigation}) => {
             >
                 <Ionicons name="md-return-up-back-outline" size={30} color="black" />
             </Pressable>
- 
+
 
             <View style={Styles.LogoContainer}>
                 <View style={Styles.IconContainer}>
@@ -79,16 +78,16 @@ const SignUp = ({navigation}) => {
                     placeholder='First Name' 
                     Icon={<FontAwesome5 name="user-edit" size={15} color={StandardTheme.DarkBlue} />} 
                     type='default'
-                    onChange={(e) => setBody({...Body, first_name: e})}
-                    value={Body.first_name}
+                    onChange={(e) => setBody({...Body, firstName: e})}
+                    value={Body.firstName}
                 />
 
                 <Input 
                     placeholder='Last Name' 
                     Icon={<FontAwesome5 name="user-edit" size={15} color={StandardTheme.DarkBlue} />} 
                     type='default'
-                    onChange={(e) => setBody({...Body, last_name: e})}
-                    value={Body.last_name}
+                    onChange={(e) => setBody({...Body, lastName: e})}
+                    value={Body.lastName}
                 />
 
                 <Input 
@@ -147,15 +146,15 @@ const SignUp = ({navigation}) => {
                     placeholder='Account Type'
                     style={{width: '80%'}}
                     onValueChange={(e) => {
-                        setBody({...Body, Account_type: e})
+                        setBody({...Body, userType: e})
                     }}
-                    selectedValue={Body.Account_type}
+                    selectedValue={Body.userType}
                     
                 >
                     {
                         accountTypes.length > 0 &&
                         accountTypes.map(el => {
-                            return <Picker.Item label={el.Type} value={el.id} key={el.id}/>
+                            return <Picker.Item label={el.type} value={el.id} key={el.id}/>
                         })
                     }
     

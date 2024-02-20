@@ -4,19 +4,30 @@ import CategoryServices from "../../Services/CategoryServices";
 
 const SERVICE = new CategoryServices();
 
-const useCategories = () => {
+const useCategories = ({filters}) => {
     const { User, IsAuth } = useContext(AuthContext);
     const [Categories, setCategories] = useState([]);
-    const [error, setError] = useState(null)
+    const [Pagination, setPagination] = useState({});
+    const [error, setError] = useState(null);
 
-    const fetchCategories = useCallback (async () => {
+    const fetchCategories = useCallback (async ({filters}) => {
         try{
-            const {data, message} = await SERVICE.GetCategories({token: User.token })
-            setCategories(data.data)
+            const {data: categories} = await SERVICE.GetCategories({token: User.token, filters })
+            const {success, data, pagination, message} = categories
+
+            if(!success) {
+                setCategories([]);
+                setPagination({});
+                setError(message);
+                return
+            }
+
+            setCategories(data);
+            setPagination(pagination);
+
         } catch(e) {
             console.log(e)
             setCategories([])
-            setTotal(0)
             setError(e)
         }
     }, 
@@ -24,11 +35,13 @@ const useCategories = () => {
     
 
     useEffect(() => {
-		fetchCategories()
+		fetchCategories({filters})
 	}, [fetchCategories])
 
     return {
         Categories,
+        Pagination,
+        fetchCategories,
         error
     }
 

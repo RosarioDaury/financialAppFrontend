@@ -3,24 +3,25 @@ import axios from 'axios';
 // import jwtDecode from 'jwt-decode';
 //LocalURL: string = 'http://192.168.0.107:3000';
 
-class ApiService {
+class UserServices {
     constructor() {
         this.BASE_URL = BASE_URL
     }
 
-    GetAll = async (endpoint) => {
-        return await axios.get(`${BASE_URL}${endpoint}`)
+    GetUserTypes = async () => {
+        const {success, data, error} = await axios.get(`${BASE_URL}/user/get/types`);
+        return {success, data, error}
     }
 
     AuthUser = (body) => {
         return new Promise(
             function (resolve, reject) {
-                axios.post(`${BASE_URL}/users/auth`, body)
+                axios.post(`${BASE_URL}/user/auth`, body)
                 .then(response => {
-                    const {User, IsAuth} = response.data;
+                    const {data, success} = response.data;
                     resolve({
-                        User,
-                        IsAuth
+                        User: data,
+                        IsAuth: success
                     });
                 })
                 .catch(error => {
@@ -31,10 +32,10 @@ class ApiService {
     }
 
     CreateUser = async (body) => {
-        const {Message, error} = await axios.post(`${BASE_URL}/users/create`, body);
+        const {Message, error} = await axios.post(`${BASE_URL}/user/create`, body);
         return {Message, error}
     }
 
 }
 
-export default ApiService;
+export default UserServices;

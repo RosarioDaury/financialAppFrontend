@@ -1,16 +1,20 @@
 import React, {useState, useEffect, useContext} from 'react';
-import { StyleSheet, View, Text, Pressable } from 'react-native';
+import { View, Text } from 'react-native';
 import { StandardTheme } from '../../Styles/Theme';
 import { Styles } from './Styles';
 import Input from '../../Common/Input/Input';
 import Button from '../../Common/Button/Button';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
-import { Ionicons } from '@expo/vector-icons';
 import HandleAuth from '../../Utils/HandleAuth';
 import { AuthContext } from '../../Context/UserContext';
+import SessionsDB from '../../database/session';
+import { useIsFocused } from '@react-navigation/native';
+
+const Session = new SessionsDB();
 
 const Login = ({navigation}) => {
+    const isFocused = useIsFocused();
     const [credentials, setCredentials] = useState({username: '', password: ''});
     const {setUser, User, setIsAuth, IsAuth} = useContext(AuthContext);
 
@@ -19,8 +23,8 @@ const Login = ({navigation}) => {
     }
 
     useEffect(() => {
-        // NAVIGATE TO MAIN SCREEN
-    }, [IsAuth])
+        Session.getSession({setUser, setIsAuth})
+    }, [isFocused])
 
     if(IsAuth){
         navigation.navigate('Home')

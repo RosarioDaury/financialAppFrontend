@@ -20,7 +20,7 @@ const Carousel = ({items}) => {
 
 const styles = StyleSheet.create({
     carouselContainer: {
-      width: '90%',
+      width: '100%',
       alignSelf: 'center',
     },
     carouselItem: {

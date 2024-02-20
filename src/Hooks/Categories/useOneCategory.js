@@ -16,7 +16,6 @@ const useCategory = ({id}) => {
         } catch(e) {
             console.log(e)
             setCategory([])
-            setTotal(0)
             setError(e)
         }
     }, 

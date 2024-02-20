@@ -7,27 +7,19 @@ class CategoryServices {
         this.BASE_URL = BASE_URL
     }
 
-    GetCategories = async ({token}) => {
+    GetCategories = async ({token, filters}) => {
         return await axios.get(
-            `${this.BASE_URL}/categories/get/user`,
+            `${this.BASE_URL}/category/get${generateQueryString(filters)}`,
             {
                 headers: {
-                    usertoken: token
+                    token
                 }
             }
         )
     }
 
-
-    GetOneCategory = async ({token, categoryId}) => {
-        return await axios.get(
-            `${this.BASE_URL}/categories/get/one?category=${categoryId}`,
-            {
-                headers: {
-                    usertoken: token
-                }
-            }
-        )
+    createCategory = async ({body, token}) => {
+        return await axios.post(`${this.BASE_URL}/category/create`, body, {headers: {token}})
     }
 }
 

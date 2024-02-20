@@ -27,14 +27,14 @@ export const Styles = StyleSheet.create({
         width: '100%',
         display: 'flex',
         justifyContent: 'flex-start',
-        marginBottom: 50
+        marginBottom: 80
     },
     LogoContainer: {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         gap: 15,
-        marginVertical: 50
+        marginVertical: 80
     },  
     IconContainer: {
         borderColor: StandardTheme.DarkBlue,
