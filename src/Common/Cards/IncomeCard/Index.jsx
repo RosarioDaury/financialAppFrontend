@@ -15,12 +15,12 @@ const IncomeCard = ({data}) => {
                 <MaterialCommunityIcons name="account-cash" size={35} color={StandardTheme.Green} />
                 <View>
                     <Text style={styles.title}>{data?.title || ""}</Text>
-                    <Text style={styles.date}>{formatDateOnly(data.date) || ""}</Text>
+                    <Text style={{...styles.date, color: StandardTheme.Grey}}>{formatDateOnly(data.date) || ""}</Text>
                 </View>
             </View>
             
             <View>
-                <Text style={styles.date}>+{formatCurrency(data?.amount) || ""}</Text>
+                <Text style={{...styles.date, color: StandardTheme.Green}}>+{formatCurrency({amount: data?.amount, decimals: false}) || ""}</Text>
             </View>
         </View>
     )
@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
         paddingVertical: 30,
         flexDirection: 'row',
-        marginHorizontal: 10,
+        marginHorizontal: 8,
         gap: 30,
         borderRadius: 20,
         width: 290,
@@ -71,7 +71,6 @@ const styles = StyleSheet.create({
     },
     date: {
         fontSize: FontSizes.small,
-        color: StandardTheme.Grey
     }
 })
 

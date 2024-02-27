@@ -1,8 +1,8 @@
 import {BASE_URL, SECRET_KEY} from '@env';
 import axios from 'axios';
+import { Alert } from 'react-native';
 // import jwtDecode from 'jwt-decode';
 //LocalURL: string = 'http://192.168.0.107:3000';
-
 class UserServices {
     constructor() {
         this.BASE_URL = BASE_URL
@@ -20,20 +20,37 @@ class UserServices {
                 .then(response => {
                     const {data, success} = response.data;
                     resolve({
-                        User: data,
-                        IsAuth: success
+                        token: data,
+                        auth: success
                     });
                 })
                 .catch(error => {
-                    reject(error);
+                    reject(error.response.data.error);
                 })
             }
         )
     }
 
     CreateUser = async (body) => {
-        const {Message, error} = await axios.post(`${BASE_URL}/user/create`, body);
-        return {Message, error}
+        try{
+            const {Message, error} = await axios.post(`${BASE_URL}/user/create`, body);
+            return {Message, error}
+        }catch(error) {
+            console.log(err.response.data.error);
+            Alert.alert(err.response.data.error);
+        }
+        
+    }
+
+    updateUser = async ({token, body}) => {
+        try{
+            const {data} = await axios.put(`${BASE_URL}/user/update`, body, { headers: {token}});
+            return data;
+        } catch(error) {
+            console.log(err.response.data.error);
+            Alert.alert(err.response.data.error);
+        }
+        
     }
 
 }

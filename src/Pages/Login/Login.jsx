@@ -6,30 +6,35 @@ import Input from '../../Common/Input/Input';
 import Button from '../../Common/Button/Button';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
-import HandleAuth from '../../Utils/HandleAuth';
 import { AuthContext } from '../../Context/UserContext';
-import SessionsDB from '../../database/session';
 import { useIsFocused } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const Session = new SessionsDB();
 
 const Login = ({navigation}) => {
     const isFocused = useIsFocused();
     const [credentials, setCredentials] = useState({username: '', password: ''});
-    const {setUser, User, setIsAuth, IsAuth} = useContext(AuthContext);
+    const {IsAuth, logIn, setUser, setIsAuth, setUserFromToken} = useContext(AuthContext);
 
     const SubmitLogin = () => {
-        HandleAuth(credentials, setUser, setIsAuth)
+        logIn({body: credentials})
     }
 
     useEffect(() => {
-        Session.getSession({setUser, setIsAuth})
-    }, [isFocused])
+        if(IsAuth) {
+            navigation.navigate('Home')
+        }
+    }, [IsAuth])
 
-    if(IsAuth){
-        navigation.navigate('Home')
-        return
-    }
+    useEffect(() => {
+        const getsession = async () => {
+            let token = await AsyncStorage.getItem('token');
+            if(token){
+                setUserFromToken({token})
+            }
+        }
+        getsession();
+    }, [isFocused])
 
     return(
         <View style={Styles.Container}>

@@ -39,7 +39,8 @@ export const Styles = StyleSheet.create({
         width: '100%',
         display: 'flex',
         justifyContent: 'flex-start',
-        marginBottom: 20
+        marginBottom: 20,
+        marginTop: 40
     },
     LogoContainer: {
         display: 'flex',

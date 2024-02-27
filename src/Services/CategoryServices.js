@@ -21,6 +21,10 @@ class CategoryServices {
     createCategory = async ({body, token}) => {
         return await axios.post(`${this.BASE_URL}/category/create`, body, {headers: {token}})
     }
+
+    deleteCategory = async ({id, token}) => {
+        return await axios.delete(`${this.BASE_URL}/category/delete/${id}`, {headers: {token}})
+    }
 }
 
 

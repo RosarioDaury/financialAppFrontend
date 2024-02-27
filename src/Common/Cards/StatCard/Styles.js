@@ -2,44 +2,25 @@ import { StyleSheet } from 'react-native';
 import {StandardTheme} from '../../../Styles/Theme';
 import { FontSizes } from '../../../Styles/GlobalStyles';
 
-const Styles = (color) => StyleSheet.create({
+const Styles = StyleSheet.create({
     Container: {
         backgroundColor: StandardTheme.White,
-        width: '85%',
+        width: 100,
         paddingVertical: 15,
-        paddingHorizontal: 20,
-        flexDirection: 'row',
-        borderRadius: 15,
+        paddingHorizontal: 5,
+        borderRadius: 5,
         justifyContent: 'space-between',
-        shadowColor: StandardTheme.DarkBlue,
-        shadowOpacity: 0.2,
-        shadowRadius: 1,
-        shadowOffset: {
-            height: .5,
-            width: .5
-        },
-    },
-    Category: {
-        display: 'flex',
-        flexDirection: 'row',
         alignItems: 'center',
-        gap: 10,
+        shadowColor: StandardTheme.DarkBlue,
+        gap: 15,
+        marginLeft: 5
     },
-    Name:{
-        color: color,
-        fontSize: FontSizes.medium,
+    title: {
         fontWeight: 'bold'
     },
-    Remaining: {
-        color: StandardTheme.Grey,
-        fontSize: FontSizes.small
-    },
-    TotalContainer: {
-        display: 'flex',
-        alignItems: "flex-end",
-    },  
-    Total: {
-        fontSize: FontSizes.medium
+    total: {
+        fontSize: FontSizes.xsmall,
+        color: StandardTheme.Grey
     }
 })
 

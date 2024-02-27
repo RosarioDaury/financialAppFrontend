@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, TextInput } from 'react-native';
 import Styles from './Styles';
+import { StandardTheme } from '../../Styles/Theme';
 
 const Input = ({placeholder, Icon, type, onChange, value}) => {
     return(
@@ -16,6 +17,7 @@ const Input = ({placeholder, Icon, type, onChange, value}) => {
                     secureTextEntry={type == 'visible-password' ? true : false}
                     onChangeText={(e) => onChange(e)}
                     value={value}
+                    placeholderTextColor={StandardTheme.Grey}
                 />
             </View>
         </View>

@@ -16,11 +16,11 @@ const Styles = StyleSheet.create({
         zIndex: 10,
         backgroundColor: 'white',
         shadowColor: StandardTheme.DarkBlue,
-        shadowOpacity: 0.5,
-        shadowRadius: 2,
+        shadowOpacity: 0.2,
+        shadowRadius: .5,
         shadowOffset: {
-            height: 1,
-            width: 1
+            height: .2,
+            width: .2
         },
         display: 'flex',
         justifyContent: 'center',
@@ -32,18 +32,12 @@ const Styles = StyleSheet.create({
         width: "90%",
         backgroundColor: 'white',
         borderRadius: 15,
-        shadowColor: StandardTheme.DarkBlue,
-        shadowOpacity: 0.5,
-        shadowRadius: 1,
-        shadowOffset: {
-            height: .2,
-            width: .2
-        },
     },
     Input: {
         width: "100%",
         paddingVertical: 10,
         paddingHorizontal: 35,
+        color: StandardTheme.DarkBlue
     }
 
 })

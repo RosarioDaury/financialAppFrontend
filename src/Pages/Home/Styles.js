@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet} from 'react-native';
 import { StandardTheme } from '../../Styles/Theme';
 import { FontSizes } from '../../Styles/GlobalStyles';
 
@@ -41,27 +41,24 @@ export const Styles = StyleSheet.create({
         position: 'absolute',
         left:0,
         right:0,
+        top: 240,
         marginLeft: 'auto',
         marginRight: 'auto',
-        bottom: -60,
         alignItems: 'center',
     },
     incomeTrack: {
-        backgroundColor: StandardTheme.White,
-        display: 'flex', 
-        flexDirection: 'row', 
-        justifyContent: 'center', 
-        alignItems: 'center',
+        width: '70%',
+        backgroundColor: '#ffff',
         paddingHorizontal: 30,
-        paddingVertical: 15,
-        borderRadius: 25,
-        gap: 20,
+        paddingVertical: 5,
+        borderRadius: 15,
+        gap: 5,
         shadowColor: StandardTheme.DarkBlue,
-        shadowOpacity: .2,
-        shadowRadius: 1,
+        shadowOpacity: .1,
+        shadowRadius: .5,
         shadowOffset: {
-            height: 3,
-            width: 3
+            height: 2,
+            width: 2
         },
     },
     Income: {
@@ -78,12 +75,21 @@ export const Styles = StyleSheet.create({
         text:{ color: StandardTheme.DarkBlue, fontSize: 15 },
         amount: { color: StandardTheme.Red, fontSize: 20, fontWeight: 'bold' }
     },
-    StatsContainer: {
-        marginTop: 75,
-        marginBottom: 75,
-        gap: 10,
-        width: '100%',
-        justifyContent: 'center',
-        alignItems: 'center'
+    chartContainer: {
+        flex: 1,
+        justifyContent: 'center', 
+        alignItems: 'center',
+        marginTop: 50,
+        width: '98%',
+        padding: 20,
+        paddingTop: 25,
+        borderRadius: 10,
+        alignSelf: 'center',
+        backgroundColor: StandardTheme.DarkBlue
+    },
+    chartTitle: {
+        color: StandardTheme.White,
+        fontWeight: 'bold',
+        fontSize: FontSizes.normal
     }
 })

@@ -26,9 +26,9 @@ const useCategories = ({filters}) => {
             setPagination(pagination);
 
         } catch(e) {
-            console.log(e)
+            console.log(e.response.data)
             setCategories([])
-            setError(e)
+            setError(e.response.data.message)
         }
     }, 
     [setCategories])

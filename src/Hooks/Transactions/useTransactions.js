@@ -16,9 +16,9 @@ const useTransactions = ({filters = {}}) => {
                 setTransactions(data)
             }   
         } catch(e) {
-            console.log(e)
+            console.log(e.response.data)
             setTransactions([])
-            setError(e)
+            setError(e.response.data.message)
         }
     }, 
     [setTransactions])

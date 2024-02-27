@@ -13,6 +13,7 @@ const Carousel = ({items}) => {
                     item
                 )}
                 style={styles.list}
+                ItemSeparatorComponent={() => <View style={{width: 5}} />}
             />
         </View>
     )

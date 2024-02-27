@@ -1,5 +1,5 @@
-import React, {useContext, useEffect, useState} from 'react';
-import { View, ScrollView, Text, Dimensions } from 'react-native';
+import React, {useContext, useEffect} from 'react';
+import { View, ScrollView, Text, Dimensions} from 'react-native';
 
 import { StandardTheme } from '../../Styles/Theme';
 import Button from '../../Common/Button/Button';
@@ -10,25 +10,44 @@ import { Styles } from './Styles';
 
 import { AuthContext } from '../../Context/UserContext';
 
-import useCategories from '../../Hooks/Categories/useCategories';
 import useTransactionTotals from '../../Hooks/Transactions/useTransactionTotals';
 import formatCurrency from '../../Utils/formatCurrency';
 import Navbar from '../../Common/Navbar/Index';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-
+import { BarChart, PieChart } from 'react-native-chart-kit';
+import useCategoriesChart from '../../Hooks/Categories/useCategoriesChart';
 
 const Home = ({navigation}) => {
-    const { User, IsAuth } = useContext(AuthContext);
-    const {Categories} = useCategories({filters: {}});
+    const { User, IsAuth, getTokenFromStorage } = useContext(AuthContext);
     const {IncomeTotal, OutcomeTotal, fetchTransactionTotals, error} = useTransactionTotals();
+    const {data: dataChart, fetchCategoriesChart, error: errorChart} = useCategoriesChart()
 
-    if(!IsAuth) {
-        navigation.navigate('Login')
-        return
-    }
 
+    const dataPie = [
+        {
+        name: "Income",
+        population:  IncomeTotal.amount ?? 0,
+        color: StandardTheme.GreenPieChart,
+        legendFontColor: "grey",
+        legendFontSize: 15
+        },
+        {
+        name: "Expenses",
+        population: OutcomeTotal.amount ?? 0,
+        color: StandardTheme.RedPieChart,
+        legendFontColor: "grey",
+        legendFontSize: 15
+        }
+    ];
+
+    useEffect(() => {
+        if(!IsAuth) {
+            navigation.navigate('Login');
+        }
+    }, [IsAuth]);
+
+    
     return(
-        <View>
+        <View style={{height: '100%'}}>
             <ScrollView>
                 <View style={Styles.Header}>
                     <View style={Styles.username}>  
@@ -40,8 +59,10 @@ const Home = ({navigation}) => {
                     <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
                         <View style={Styles.lastestIncome}>
                             <Text style={Styles.lastestIncome.text}>Current Balance</Text>
-                            <Text style={Styles.lastestIncome.amount}>{formatCurrency(User?.balance) || 0.00}</Text>
+                            <Text style={Styles.lastestIncome.amount}>{formatCurrency({amount: User?.balance, decimals: true}) || 0.00}</Text>
                         </View>
+
+
                         <View style={{...Styles.lastestIncome, alignItems: 'center', gap: 10}}>
                             <View style={{width: '70%', alignSelf: 'flex-end'}}>
                                 <Button 
@@ -70,23 +91,46 @@ const Home = ({navigation}) => {
                         <View style={Styles.incomeTrack}>
                             <View style={Styles.Income}>
                                 <Text style={Styles.Income.text}>Income</Text>
-                                <Text style={Styles.Income.amount}>{formatCurrency(IncomeTotal.amount)}</Text>
+                                <Text style={Styles.Income.amount}>{formatCurrency({amount: IncomeTotal.amount, decimals: true})}</Text>
                             </View>
 
-                            <View style={{backgroundColor: StandardTheme.Grey, borderLeftColor: StandardTheme.DarkBlue, borderWidth: .5, width: 1, height: '80%'}} />
-                            
+                            <View style={{backgroundColor: StandardTheme.Grey, borderBottomColor: StandardTheme.Grey, borderWidth: .5, width: '100%', height: 1}} />
+
                             <View style={Styles.Outcome}>
                                 <Text style={Styles.Outcome.text}>Outcome</Text>
-                                <Text style={Styles.Outcome.amount}>{formatCurrency(OutcomeTotal.amount)}</Text>
+                                <Text style={Styles.Outcome.amount}>{formatCurrency({amount: OutcomeTotal.amount, decimals: true})}</Text>
                             </View>
                         </View>
                     </View>
                 </View>
 
 
-                <View style={{marginTop: 100, alignItems: 'center', gap: 20}}>
+                <View style={{...Styles.chartContainer, width: '88%', marginTop: 140, marginBottom: 10}}>
+                            <Text style={Styles.chartTitle}>Incomes vs Expenses</Text>
+                            <PieChart
+                                data={dataPie}
+                                width={Dimensions.get('window').width - 70}
+                                height={140}
+                                chartConfig={{
+                                    backgroundColor: '#041E42',
+                                    backgroundGradientFrom: '#041E42',
+                                    backgroundGradientTo: '#041E42',
+                                    decimalPlaces: 0,
+                                    color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+                                    style: {
+                                        borderRadius: 10
+                                    }
+                                }}
+                                accessor={"population"}
+                                backgroundColor={"transparent"}
+                                paddingLeft={"0"}
+                            />
+                </View>
+
+
+                <View style={{marginTop: 50, alignItems: 'center', gap: 20}}>
                     <View style={{ width: '80%', flexDirection: 'row', justifyContent: 'space-between'}}>
-                        <Text style={{fontSize: 16, fontWeight: 'bold'}}>Incomes</Text>
+                        <Text style={{fontSize: 16, fontWeight: 'bold', color: StandardTheme.DarkBlue}}>Incomes</Text>
                         <Text style={{color: StandardTheme.Grey}}>See All</Text>
                     </View>
                     <IncomeCardsSlider/>
@@ -94,29 +138,40 @@ const Home = ({navigation}) => {
 
                 <View style={{width: '100%', marginTop: 30, alignItems: 'center', gap: 20}}>
                     <View style={{ width: '80%', flexDirection: 'row', justifyContent: 'space-between'}}>
-                        <Text style={{fontSize: 16, fontWeight: 'bold'}}>Outcomes</Text>
+                        <Text style={{fontSize: 16, fontWeight: 'bold', color: StandardTheme.DarkBlue}}>Expenses</Text>
                         <Text style={{color: StandardTheme.Grey}}>See All</Text>
                     </View>
                     <OutcomeCardsSlider />
                 </View>
 
-
-                <View style={Styles.StatsContainer}>
+                <View style={{...Styles.chartContainer, marginBottom: 150}}>
+                    <Text style={{...Styles.chartTitle, marginBottom: 10}}>Category's Limit Tracking</Text>
                     {
-                        Categories.map(el => {
-                            return (
-                                <StatCard
-                                    data = {el}
-                                    key={el.id}
-                                />
-                            )
-                        })
+                        Object.keys(dataChart).length > 0 
+                        ?
+                            <BarChart
+                                data={dataChart}
+                                width={Dimensions.get('window').width - 40}
+                                height={300}
+                                yAxisLabel={'%'}
+                                chartConfig={{
+                                    backgroundGradientFrom: '#041E42',
+                                    backgroundGradientTo: '#041E42',
+                                    color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                                    strokeWidth: 2,
+                                    style:{
+                                        borderRadius: 10
+                                    }
+                                }}
+                            />
+                        : null
                     }
-                </View>
+                    
+                </View>                
 
             </ScrollView>
             
-            <Navbar/>
+            <Navbar navigation={navigation}/>
         </View>
         
     )

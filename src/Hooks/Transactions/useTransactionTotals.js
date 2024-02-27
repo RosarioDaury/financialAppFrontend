@@ -14,14 +14,18 @@ const useTransactionTotals = () => {
         try{
             const {data: response} = await SERVICE.GetTransactionsTotals({token: User.token})
             const {data, success, message} = response;
-            setIncomeTotal(data[0] ?? {amount: 0, type_id: 1 });
-            setOutcomeTotal(data[1] ?? {amount: 0, type_id: 2 })
+            const income = data.filter(el => el.type_id == 1);
+            const outcome = data.filter(el => el.type_id == 2);
+            setIncomeTotal(income[0] ?? {amount: 0, type_id: 1 });
+            setOutcomeTotal(outcome[0] ?? {amount: 0, type_id: 2 });
+
             if(!success) {
                 console.log(message);
                 setIncomeTotal({amount: 0, type_id: 1 });
                 setOutcomeTotal({amount: 0, type_id: 2 })
                 setError(message);
             }
+
         } catch(e) {
             console.log(e);
             setIncomeTotal({amount: 0, type_id: 1 });

@@ -24,10 +24,10 @@ const useTransactionsByType = ({filters = {}, type}) => {
                 setError(message);
             }
         } catch(e) {
-            console.log(e);
+            console.log(e.response.data);
             setTransactions([]);
             setPagination({});
-            setError(e);
+            setError(e.response.data.message);
         }
     }, 
     [setTransactions])
