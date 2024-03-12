@@ -1,17 +1,18 @@
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { AuthProvider } from './src/Context/UserContext';
 import Home from './src/Pages/Home/Home';
 import Landing from './src/Pages/Lading/Landing';
 import Login from './src/Pages/Login/Login';
 import SignUp from './src/Pages/SignUp/SignUp';
 import Profile from './src/Pages/Profile/Profile';
-import {NavigationContainer, DefaultTheme} from '@react-navigation/native';
+import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import CarouselExample from './src/Pages/Category/Category';
 import Category from './src/Pages/Category/Category';
+import Incomes from './src/Pages/Incomes/Incomes';
+import Expenses from './src/Pages/Expenses/Expenses';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import Reminders from './src/Pages/Reminders/Reminder';
 
 const Stack = createNativeStackNavigator();
-const Tab = createBottomTabNavigator();
 
 export default function App() {
   return (
@@ -50,6 +51,22 @@ export default function App() {
             name="Category"
             component={Category}
           />
+
+          <Stack.Screen
+            name="Incomes"
+            component={Incomes}
+          />
+
+          <Stack.Screen
+            name="Expenses"
+            component={Expenses}
+          />
+
+          <Stack.Screen
+            name="Reminders"
+            component={Reminders}
+          />
+          
         </Stack.Navigator>
       </NavigationContainer>
     </AuthProvider>

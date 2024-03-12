@@ -8,20 +8,20 @@ import { AntDesign } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
 import { Octicons } from '@expo/vector-icons';
 
-import Input from "../../Common/Input/Input";
+import Input from "../../Components/Input/Input";
 import useCategories from "../../Hooks/Categories/useCategories";
-import Button from "../../Common/Button/Button";
+import Button from "../../Components/Button/Button";
 import CategoryServices from "../../Services/CategoryServices";
 import { AuthContext } from "../../Context/UserContext";
 import { SwipeListView } from "react-native-swipe-list-view";
-import CategoryCard from "../../Common/Cards/CategoryCard/Index";
+import CategoryCard from "../../Components/Cards/CategoryCard/Index";
 import { styles, modalStyles } from "./styles";
-import DeleteHide from "../../Common/DeleteHide/DeleteHide";
+import DeleteHide from "../../Components/DeleteHide/DeleteHide";
 
 const categoryService = new CategoryServices();
 
 export default function Category({navigation}) {
-  const { User, IsAuth, setUser, logOut, setUserFromToken } = useContext(AuthContext);
+  const { User } = useContext(AuthContext);
   const [filters, setFilters] = useState({page: 1, pageSize: 100, name: ''})
   const [showModal, setShowModal] = useState(false);
   const [newCategory, setNewCategory] = useState({name: '', limit: 0});
@@ -36,10 +36,11 @@ export default function Category({navigation}) {
     try{
       await categoryService.createCategory({body: newCategory, token: User.token})
       setNewCategory({name: '', limit: 0});
-      setShowModal(false);
       setFilters({page: 1, pageSize: 100, name: ''});
+      fetchCategories({filters})
+      setShowModal(false);
     } catch(error) {
-      Alert.alert('CANNOT CREATE CATEGORY')
+      Alert.alert('Error while creating Caregory')
     }
   }
 
@@ -48,7 +49,7 @@ export default function Category({navigation}) {
       await categoryService.deleteCategory({id, token: User.token });
       fetchCategories({filters});
     } catch (error) {
-      Alert.alert('ERROR WHILE DELETING CATEGORY  ')
+      Alert.alert('Error while deleting category')
     }
   }
 

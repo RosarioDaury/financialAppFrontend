@@ -14,11 +14,10 @@ const DeleteHide = ({data, handleDelete}) => {
           style={{
             padding: 20,
             backgroundColor: StandardTheme.Red,
-            width: 100,
+            width: '90%',
             height: '100%',
             alignSelf: 'flex-end',
-            borderTopRightRadius: 15,
-            borderBottomEndRadius: 10,
+            borderRadius: 15,
             alignItems: 'flex-end',
             justifyContent: 'center'
           }}

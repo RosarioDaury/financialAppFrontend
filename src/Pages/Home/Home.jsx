@@ -2,25 +2,31 @@ import React, {useContext, useEffect} from 'react';
 import { View, ScrollView, Text, Dimensions} from 'react-native';
 
 import { StandardTheme } from '../../Styles/Theme';
-import Button from '../../Common/Button/Button';
-import StatCard from '../../Common/Cards/StatCard/Index';
-import IncomeCardsSlider from '../../Common/Cards/IncomeCard/Index';
-import OutcomeCardsSlider from '../../Common/Cards/OutcomeCard/Index';
+import Button from '../../Components/Button/Button';
+import IncomeCardsSlider from '../../Components/Cards/IncomeCard/Index';
+import OutcomeCardsSlider from '../../Components/Cards/OutcomeCard/Index';
 import { Styles } from './Styles';
 
 import { AuthContext } from '../../Context/UserContext';
 
 import useTransactionTotals from '../../Hooks/Transactions/useTransactionTotals';
 import formatCurrency from '../../Utils/formatCurrency';
-import Navbar from '../../Common/Navbar/Index';
+import Navbar from '../../Components/Navbar/Index';
 import { BarChart, PieChart } from 'react-native-chart-kit';
 import useCategoriesChart from '../../Hooks/Categories/useCategoriesChart';
+import { useIsFocused } from '@react-navigation/native';
 
 const Home = ({navigation}) => {
-    const { User, IsAuth, getTokenFromStorage } = useContext(AuthContext);
+    const { User, IsAuth } = useContext(AuthContext);
     const {IncomeTotal, OutcomeTotal, fetchTransactionTotals, error} = useTransactionTotals();
-    const {data: dataChart, fetchCategoriesChart, error: errorChart} = useCategoriesChart()
+    const {data: dataChart, fetchCategoriesChart, error: errorChart} = useCategoriesChart();
+    const useFocused = useIsFocused();
 
+
+    useEffect(() => {
+        fetchTransactionTotals();
+        fetchCategoriesChart();
+    }, [useFocused]);
 
     const dataPie = [
         {
@@ -69,7 +75,7 @@ const Home = ({navigation}) => {
                                     color={'#ffffff1a'} 
                                     text="Deposit" 
                                     action={() => {
-                                        navigation.navigate('Login')
+                                        navigation.navigate('Incomes')
                                     }}
                                 />
                             </View>
@@ -79,7 +85,7 @@ const Home = ({navigation}) => {
                                     color={'#ffffff1a'} 
                                     text="Withdraw" 
                                     action={() => {
-                                        navigation.navigate('Login')
+                                        navigation.navigate('Expenses')
                                     }}
                                 />
                             </View>
@@ -131,7 +137,6 @@ const Home = ({navigation}) => {
                 <View style={{marginTop: 50, alignItems: 'center', gap: 20}}>
                     <View style={{ width: '80%', flexDirection: 'row', justifyContent: 'space-between'}}>
                         <Text style={{fontSize: 16, fontWeight: 'bold', color: StandardTheme.DarkBlue}}>Incomes</Text>
-                        <Text style={{color: StandardTheme.Grey}}>See All</Text>
                     </View>
                     <IncomeCardsSlider/>
                 </View>
@@ -139,12 +144,11 @@ const Home = ({navigation}) => {
                 <View style={{width: '100%', marginTop: 30, alignItems: 'center', gap: 20}}>
                     <View style={{ width: '80%', flexDirection: 'row', justifyContent: 'space-between'}}>
                         <Text style={{fontSize: 16, fontWeight: 'bold', color: StandardTheme.DarkBlue}}>Expenses</Text>
-                        <Text style={{color: StandardTheme.Grey}}>See All</Text>
                     </View>
                     <OutcomeCardsSlider />
                 </View>
 
-                <View style={{...Styles.chartContainer, marginBottom: 150}}>
+                <View style={{...Styles.chartContainer, marginBottom: 100}}>
                     <Text style={{...Styles.chartTitle, marginBottom: 10}}>Category's Limit Tracking</Text>
                     {
                         Object.keys(dataChart).length > 0 
@@ -173,7 +177,6 @@ const Home = ({navigation}) => {
             
             <Navbar navigation={navigation}/>
         </View>
-        
     )
 }
 

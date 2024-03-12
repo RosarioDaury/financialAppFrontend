@@ -10,4 +10,5 @@ export const StandardTheme = {
     Yellow: '#FFC72C',
     GreenPieChart: '#1a7431',
     RedPieChart: '#8080808c',
+    Purple: "#6420AA"
 }

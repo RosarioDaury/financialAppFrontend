@@ -1,6 +1,7 @@
-import { StyleSheet} from 'react-native';
+import { StyleSheet, Dimensions} from 'react-native';
 import { FontSizes } from '../../Styles/GlobalStyles';
 import { StandardTheme } from '../../Styles/Theme';
+const { width, height } = Dimensions.get('window');
 
 export const styles = StyleSheet.create({
     header: {
@@ -20,7 +21,7 @@ export const styles = StyleSheet.create({
     title: {
         fontSize: FontSizes.normal,
         fontWeight: 'bold',
-        color: StandardTheme.Green
+        color: StandardTheme.DarkBlue
     },
     search: {
         width: '90%',
@@ -36,24 +37,25 @@ export const modalStyles = StyleSheet.create({
         padding: 25,
         zIndex: 10,
         backgroundColor: StandardTheme.DarkBlue,
+        width: width
     },  
     Header:{
         marginTop: 40,
         marginBottom: 20,
-        alignSelf: 'flex-start'
+        alignSelf: 'flex-start',
     },
     LogoContainer: {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         gap: 15,
-        marginVertical: 35
+        marginVertical: 35,
     },  
     IconContainer: {
         borderColor: StandardTheme.White,
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
     },
     Icon: {
         color: StandardTheme.DarkBlue,
@@ -76,7 +78,8 @@ export const modalStyles = StyleSheet.create({
     InputsContainer: {
         display: 'flex',
         flexDirection: 'column',
-        gap: 20,
+        gap: 15,
+        alignItems: 'center',
         marginTop: 35
     },
     Titles: {
@@ -95,6 +98,16 @@ export const modalStyles = StyleSheet.create({
         gap: 5,
         width: '40%',
         alignSelf:'flex-end',
-        marginTop: 100
+        marginTop: 25
     },
+    ContainerCategory: {
+        padding: 25,
+        zIndex: 10,
+        backgroundColor: StandardTheme.DarkBlue,
+        width: width
+    },
+    backForm: {
+        marginTop: 50,
+        marginBottom: 20,
+    }
 })

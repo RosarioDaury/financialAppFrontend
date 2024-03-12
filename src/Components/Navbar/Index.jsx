@@ -1,12 +1,8 @@
 import React from 'react';
-import { View, TextInput, Text, Pressable} from 'react-native';
+import { View, Text, Pressable} from 'react-native';
 import { StyleSheet } from 'react-native';
 import { StandardTheme } from '../../Styles/Theme';
-import { Entypo } from '@expo/vector-icons';
-import { MaterialIcons } from '@expo/vector-icons';
-import { FontAwesome5 } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
-import { FontSizes } from '../../Styles/GlobalStyles';
 
 function Navbar({navigation}) {
     return(
@@ -22,20 +18,35 @@ function Navbar({navigation}) {
                 <Text style={styles(StandardTheme.Grey).text}>Categories</Text>
             </Pressable>
 
-            <View style={styles(StandardTheme.DarkBlue).tab}>
-                <AntDesign name="pluscircle" size={22} color={StandardTheme.Grey} />
+            <Pressable 
+                style={styles(StandardTheme.DarkBlue).tab}
+                onPress={() => {
+                    navigation.navigate('Incomes')
+                }}
+            >
+                <AntDesign name="pluscircle" size={22} color={StandardTheme.Green} />
                 <Text style={styles(StandardTheme.Grey).text}>Incomes</Text>
-            </View>
+            </Pressable>
 
-            <View style={styles(StandardTheme.DarkBlue).tab}>
-                <AntDesign name="minuscircle" size={22} color={StandardTheme.Grey} />
+            <Pressable 
+                style={styles(StandardTheme.DarkBlue).tab}
+                onPress={() => {
+                    navigation.navigate('Expenses')
+                }}
+            >
+                <AntDesign name="minuscircle" size={22} color={StandardTheme.Red} />
                 <Text style={styles(StandardTheme.Grey).text}>Expenses</Text>
-            </View>
+            </Pressable>
 
-            <View style={styles(StandardTheme.DarkBlue).tab}>
-                <AntDesign name="clockcircle" size={22} color={StandardTheme.Grey} />
+            <Pressable 
+                style={styles(StandardTheme.DarkBlue).tab}
+                onPress={() => {
+                    navigation.navigate('Reminders')
+                }}
+            >
+                <AntDesign name="clockcircle" size={22} color={StandardTheme.Purple} />
                 <Text style={styles(StandardTheme.Grey).text}>Reminders</Text>
-            </View>
+            </Pressable>
 
             <Pressable
                 onPress={() => {
@@ -43,7 +54,7 @@ function Navbar({navigation}) {
                 }}
                 style={styles(StandardTheme.DarkBlue).tab}
             >
-                <AntDesign name="profile" size={25} color={StandardTheme.Grey}/>
+                <AntDesign name="profile" size={25} color={StandardTheme.Blue}/>
                 <Text style={styles(StandardTheme.Grey).text}>Profile</Text>
             </Pressable>
         </View>

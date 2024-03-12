@@ -2,7 +2,7 @@ import React, {useContext} from 'react';
 import { View } from 'react-native';
 import { StandardTheme } from '../../Styles/Theme';
 import { Styles } from './Styles';
-import Button from '../../Common/Button/Button';
+import Button from '../../Components/Button/Button';
 import { AuthContext } from '../../Context/UserContext';
 
 const Landing = ({navigation}) => {

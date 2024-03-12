@@ -8,8 +8,8 @@ import { Entypo } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 import {Picker} from '@react-native-picker/picker';
-import Input from '../../Common/Input/Input';
-import Button from '../../Common/Button/Button';
+import Input from '../../Components/Input/Input';
+import Button from '../../Components/Button/Button';
 import { useIsFocused } from '@react-navigation/native'
 
 import useAccountTypes from '../../Hooks/AccountTypes/useAccountTypes';

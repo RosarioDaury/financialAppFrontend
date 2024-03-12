@@ -6,15 +6,15 @@ import { Ionicons } from '@expo/vector-icons';
 import { SimpleLineIcons } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
 import useCategories from '../../Hooks/Categories/useCategories';
-import StatCard from '../../Common/Cards/StatCard/Index';
-import Carousel from '../../Common/Carousel/Index'
+import StatCard from '../../Components/Cards/StatCard/Index';
+import Carousel from '../../Components/Carousel/Index'
 import { AuthContext } from '../../Context/UserContext';
 import { useContext, useState, useEffect } from 'react';
 import formatCurrency from '../../Utils/formatCurrency';
-import Input from '../../Common/Input/Input';
+import Input from '../../Components/Input/Input';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
-import Button from '../../Common/Button/Button';
+import Button from '../../Components/Button/Button';
 import UserServices from '../../Services/UserServices';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 

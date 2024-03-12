@@ -5,15 +5,15 @@ const formatter = new Intl.DateTimeFormat('en', {
     second: '2-digit'
 });
 
-function formatDateTime(dateTime) {
+function formatTimeOnly(dateTime) {
     // console.log(new Date(dateTime))
     let date = new Date(dateTime);    
-    const options = { year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: true };
+    const options = { hour: 'numeric', minute: 'numeric', hour12: true };
     return new Intl.DateTimeFormat('en-US', options).format(date);
 }
 
 
-function formatDateOnly(dateTime) {
+function formatDateOnly(dateTime = new Date()) {
     let date = new Date(dateTime);    
     const options = { year: 'numeric', month: 'short', day: 'numeric' };
     return new Intl.DateTimeFormat('en-US', options).format(date);
@@ -21,6 +21,6 @@ function formatDateOnly(dateTime) {
 
 
 export {
-    formatDateTime,
+    formatTimeOnly,
     formatDateOnly
 }

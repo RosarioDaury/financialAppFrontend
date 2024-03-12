@@ -13,7 +13,7 @@ const IncomeCard = ({data}) => {
         <View style={styles.container}>
             <View style={{flexDirection: 'row', gap: 15}}>
                 <MaterialCommunityIcons name="account-cash" size={35} color={StandardTheme.Green} />
-                <View>
+                <View> 
                     <Text style={styles.title}>{data?.title || ""}</Text>
                     <Text style={{...styles.date, color: StandardTheme.Grey}}>{formatDateOnly(data.date) || ""}</Text>
                 </View>
