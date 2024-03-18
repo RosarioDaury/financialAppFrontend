@@ -64,7 +64,6 @@ class TransactionServices {
         // "amount" : "",
         // "type_id" : "",
         // "category_id" : ""
-
         return await axios.post(`${this.BASE_URL}/transaction/create`, body, {headers: {token}})
     }
 

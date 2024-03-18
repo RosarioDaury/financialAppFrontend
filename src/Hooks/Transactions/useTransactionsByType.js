@@ -5,7 +5,7 @@ import { AuthContext } from "../../Context/UserContext";
 const SERVICE = new TransactionServices();
 
 const useTransactionsByType = ({filters = {}, type}) => {
-    const { User, IsAuth } = useContext(AuthContext);
+    const { User } = useContext(AuthContext);
     const [Transactions, setTransactions] = useState([]);
     const [Pagination, setPagination] = useState({});
     const [error, setError] = useState(null)
@@ -18,7 +18,6 @@ const useTransactionsByType = ({filters = {}, type}) => {
             setPagination(pagination);
 
             if(!success) {
-                console.log(message);
                 setTransactions([]);
                 setPagination({});
                 setError(message);

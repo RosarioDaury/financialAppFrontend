@@ -12,6 +12,13 @@ function formatTimeOnly(dateTime) {
     return new Intl.DateTimeFormat('en-US', options).format(date);
 }
 
+function formatTimeHour(dateTime = new Date()) {
+    let date = new Date(dateTime);    
+    let result = date.toLocaleString('en-US', {
+        hour12: false,
+    })
+    return result.split(',')[1];
+}
 
 function formatDateOnly(dateTime = new Date()) {
     let date = new Date(dateTime);    
@@ -22,5 +29,6 @@ function formatDateOnly(dateTime = new Date()) {
 
 export {
     formatTimeOnly,
-    formatDateOnly
+    formatDateOnly,
+    formatTimeHour
 }

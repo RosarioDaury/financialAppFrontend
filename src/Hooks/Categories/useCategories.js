@@ -5,7 +5,7 @@ import CategoryServices from "../../Services/CategoryServices";
 const SERVICE = new CategoryServices();
 
 const useCategories = ({filters}) => {
-    const { User, IsAuth } = useContext(AuthContext);
+    const { User } = useContext(AuthContext);
     const [Categories, setCategories] = useState([]);
     const [Pagination, setPagination] = useState({});
     const [error, setError] = useState(null);
@@ -28,7 +28,7 @@ const useCategories = ({filters}) => {
         } catch(e) {
             console.log(e.response.data)
             setCategories([])
-            setError(e.response.data.message)
+            setError(e.response.data.error)
         }
     }, 
     [setCategories])

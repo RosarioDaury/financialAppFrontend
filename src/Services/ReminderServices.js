@@ -26,13 +26,7 @@ class ReminderServices {
     }
 
     CreateReminder= async ({body, token}) => {
-        try{
-            const {data} = await axios.post(`${this.BASE_URL}/reminder/create`, body, { headers: { token }})
-            return data
-        } catch(error) {
-            return e.response.data
-        }
-        
+        return await axios.post(`${this.BASE_URL}/reminder/create`, body, { headers: { token }})
     }
 
     UpdateReminder = async ({token, id, body}) => {

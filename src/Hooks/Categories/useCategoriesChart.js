@@ -38,8 +38,9 @@ const useCategoriesChart = () => {
             });
 
         } catch(e) {
-            setCategories([]);
-            setError(message);
+            console.log(e.response.data)
+            setData([])
+            setError(e.response.data.error)
         }
     }, 
     [setData])

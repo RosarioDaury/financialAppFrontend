@@ -4,9 +4,9 @@ import { StandardTheme } from "../../../Styles/Theme";
 import { FontSizes } from "../../../Styles/GlobalStyles";
 import {formatDateOnly, formatTimeOnly} from "../../../Utils/formatDate";
 import formatCurrency from "../../../Utils/formatCurrency";
+import { forwardRef } from "react";
 
-
-const IncomeCardDetailed = ({data}) => {
+const IncomeCardDetailed = forwardRef(function IncomeCardDetailed(props, ref) {
     return(
         <View style={styles.container}>
             <View style={styles.transaction}>
@@ -16,14 +16,14 @@ const IncomeCardDetailed = ({data}) => {
                         gap: 2
                     }}
                 >
-                    <Text style={styles.title}>{data?.title}</Text>
-                    <Text style={styles.description}>{data?.description}</Text>
+                    <Text style={styles.title}>{props.data?.title}</Text>
+                    <Text style={styles.description}>{props.data?.description}</Text>
                 </View>
 
                 <View>
-                    <Text style={styles.amount}>{formatCurrency({amount: data.amount, decimals: true})}</Text>
-                    <Text style={styles.description}>{data.date ? formatDateOnly(data.date) : ''}</Text>
-                    <Text style={styles.description}>{data.date ? formatTimeOnly(data.date) : ''}</Text>
+                    <Text style={styles.amount}>{formatCurrency({amount: props.data.amount, decimals: true})}</Text>
+                    <Text style={styles.description}>{props.data.date ? formatDateOnly(props.data.date) : ''}</Text>
+                    <Text style={styles.description}>{props.data.date ? formatTimeOnly(props.data.date) : ''}</Text>
                     
                 </View>
             
@@ -32,7 +32,7 @@ const IncomeCardDetailed = ({data}) => {
         </View>
         
     )
-}
+})
 
 const styles = StyleSheet.create({
     container: {

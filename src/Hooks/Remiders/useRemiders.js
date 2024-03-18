@@ -19,6 +19,7 @@ const useReminders = ({filters = {}}) => {
                 setReminders([]);
                 setPagination({});
                 setError(message);
+                return
             }
 
             setReminders(data)
@@ -27,7 +28,7 @@ const useReminders = ({filters = {}}) => {
             console.log(error);
             setReminders([]);
             setPagination({});
-            setError(error);
+            setError(error.error);
         }
     }, [setReminders])
 

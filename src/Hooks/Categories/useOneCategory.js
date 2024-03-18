@@ -5,18 +5,18 @@ import CategoryServices from "../../Services/CategoryServices";
 const SERVICE = new CategoryServices();
 
 const useCategory = ({id}) => {
-    const { User, IsAuth } = useContext(AuthContext);
+    const { User } = useContext(AuthContext);
     const [Category, setCategory] = useState([]);
     const [error, setError] = useState(null)
 
     const fetchCategory = useCallback (async ({id}) => {
         try{
-            const {data, message} = await SERVICE.GetOneCategory({token: User.token, categoryId: id})
-            setCategory(data)
+            const {data} = await SERVICE.GetOneCategory({token: User.token, categoryId: id})
+            setCategory(data);
         } catch(e) {
-            console.log(e)
+            console.log(e.response.data)
             setCategory([])
-            setError(e)
+            setError(e.response.data.error)
         }
     }, 
     [setCategory])

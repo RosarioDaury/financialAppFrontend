@@ -4,9 +4,10 @@ import { StandardTheme } from "../../../Styles/Theme";
 import { FontSizes } from "../../../Styles/GlobalStyles";
 import {formatDateOnly, formatTimeOnly} from "../../../Utils/formatDate";
 import formatCurrency from "../../../Utils/formatCurrency";
+import { forwardRef } from "react";
 
 
-const ExpensesCardDetailed = ({data}) => {
+const ExpensesCardDetailed = forwardRef(({data}, ref) => {
     return(
         <View style={styles.container}>
             <View style={styles.transaction}>
@@ -30,7 +31,7 @@ const ExpensesCardDetailed = ({data}) => {
             
         </View>
     )
-}
+})
 
 const styles = StyleSheet.create({
     container: {

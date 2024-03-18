@@ -126,6 +126,9 @@ const Profile = ({navigation}) => {
                 visible={showModal}
                 animationType='slide'
                 transparent={true}
+                onRequestClose={() => {
+                    setShowModal(false)
+                }}
             >   
                 <ScrollView style={modalStyles.Container}>
 

@@ -1,31 +1,30 @@
-import { Pressable, ScrollView, View, Text, Modal, Alert, Animated, Dimensions } from "react-native";
-import {Picker} from '@react-native-picker/picker';
-import { useContext, useEffect, useState, useRef } from "react";
-import { reminderStyles, modalStyles } from "./styles";
+import { Pressable, View, Text } from "react-native";
+import { useState, useContext, useEffect } from "react";
+import { reminderStyles } from "./styles";
 import { StandardTheme } from "../../Styles/Theme";
 import Input from "../../Components/Input/Input";
-import Button from "../../Components/Button/Button";
 
 import { Ionicons } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
-import { Feather } from '@expo/vector-icons';
-import { MaterialIcons } from '@expo/vector-icons';
-import DateTimePicker from '@react-native-community/datetimepicker'
+
 import useReminders from "../../Hooks/Remiders/useRemiders";
 import Pages from "../../Components/Pagination/Index";
 import { SwipeListView } from "react-native-swipe-list-view";
 import ReminderCard from "../../Components/Cards/RemiderCard/Index";
 import UpdateDeleteHide from "../../Components/UpdateHide/UpdateDeleteHide";
-import useReminderIntervals from "../../Hooks/Remiders/useReminderIntervals";
+import ReminderCreateForm from "../../Components/Forms/ReminderCreateForm";
+import { formatTimeHour, formatTimeOnly } from "../../Utils/formatDate";
+import { AuthContext } from "../../Context/UserContext";
+import ReminderServices from "../../Services/ReminderServices";
+
+const reminderServices = new ReminderServices();
 
 export default function Reminders({navigation}) {
+    const { User } = useContext(AuthContext);
     const [filters, setFilters] = useState({page: 1, pageSize: 5, name: ""})
     const {Reminders, Pagination, fetchReminders, error} = useReminders({filters})
-    const {Intervals, setIntervals} = useReminderIntervals();
     const [showModal, setShowModal] = useState(false);
-    const [formTranslateValue, setFormTranslateValue] = useState(0);
-    const animatedValue = useRef(new Animated.Value(0)).current;
-    const { width, height } = Dimensions.get('window');
+    
 
     const handleNext = () => {
         setFilters({...filters, page: filters.page + 1})  
@@ -35,36 +34,50 @@ export default function Reminders({navigation}) {
         setFilters({...filters, page: filters.page - 1})
     }
 
+    const createReminder = async ({reminder, setReminder}) => {
+        try {
+            const {
+                amount,
+                interval_id,
+                date,
+                time,
+                title,
+                description
+            } = reminder;
 
-    const handleNextPageForm = () => {
-        if(formTranslateValue == 1) {
-            setFormTranslateValue(1)
-        } else {
-            setFormTranslateValue(formTranslateValue + 0.25)
-        }
-    };
+            const body = {
+                amount,
+                interval_id,
+                date: `${date.toISOString().split('T')[0]}${formatTimeHour(time)}`,
+                title,
+                description
+            }
+            console.log(body)
 
-    const handlePrevPageForm = () => {
-        if(formTranslateValue == 1) {
-            setFormTranslateValue(1)
-        } else {
-            setFormTranslateValue(formTranslateValue - 0.25)
+            await reminderServices.CreateReminder({body, token: User.token})
+            setShowModal(false);
+            setFilters({page: 1, pageSize: 5});
+            fetchReminders({filters});
+            setReminder({
+                amount: '',
+                interval_id: 1,
+                date: new Date(),
+                time: new Date(),
+                title: '',
+                description: ''
+            })
+
+        } catch(error) {
+            console.log(error);
+            Alert.alert('Error while creating REMINDER, try later');
         }
-    };
+    }
 
     useEffect(() => {
-        Animated.timing(animatedValue, {
-            toValue: formTranslateValue,
-            duration: 500,
-            useNativeDriver: true,
-        }).start();
-    }, [formTranslateValue])
-
-
-    const interpolatedValue = animatedValue.interpolate({
-        inputRange: [0, 1],
-        outputRange: [0, width * -4], // Adjust the transform values
-    });
+        if(error) {
+            Alert.alert(error)
+        }
+    }, [error])
 
 
     return(
@@ -123,155 +136,11 @@ export default function Reminders({navigation}) {
                 }}
             />
 
-
-            <Modal
-                visible={showModal}
-                animationType='slide'
-                transparent={true}
-            >   
-
-                <Animated.View
-                    style={[{
-                        flexDirection: 'row',
-                        width: width * 4,
-                        height: height,
-                    }, { transform: [{ translateX: interpolatedValue}] }]}
-                >
-
-                    <View style={modalStyles.Container}>
-
-                        <Pressable
-                            onPress={() => setShowModal(false)}
-                            style={modalStyles.Header}
-                        >
-                            <AntDesign name="down" size={30} color={StandardTheme.White}/>
-                        </Pressable>
-
-                        <View style={modalStyles.LogoContainer}>
-                            <Text style={modalStyles.textLogo}>Create New <Text style={{color: StandardTheme.Purple}}>Reminder</Text></Text>
-                            <Text style={modalStyles.description}>Fill the form to create your new Reminder</Text>
-                        </View>
-                    
-                        <View style={modalStyles.InputsContainer}>
-                                <Input 
-                                    placeholder='Name' 
-                                    Icon={<Feather name="file-text" size={15} color={StandardTheme.DarkBlue} />} 
-                                    type='default'
-                                    onChange={(e) => {setNewCategory({...newCategory, name: e})}}
-                                    value={""}
-                                />
-
-                                <Input 
-                                    placeholder='Description' 
-                                    Icon={<Feather name="file-text" size={15} color={StandardTheme.DarkBlue} />} 
-                                    type='default'
-                                    onChange={(e) => {setNewCategory({...newCategory, limit: e})}}
-                                    value={""}
-                                    multiline={true}
-                                />
-
-                                <Input 
-                                    placeholder='Amount' 
-                                    Icon={<MaterialIcons name="attach-money" size={15} color={StandardTheme.DarkBlue} />} 
-                                    type='number-pad'
-                                    onChange={(e) => setBody({...Body, Budget: e})}
-                                    value={0}
-                                />
-                                
-                                {       
-        
-                                <View style={modalStyles.ButtonContainer}>
-                                    <Button color={StandardTheme.Purple} text='Next' action={handleNextPageForm}/>
-                                </View>
-                            }
-
-                        </View>
-                    
-                    </View>
-
-                    <View style={modalStyles.Container}>
-                        <Pressable
-                            onPress={handlePrevPageForm}
-                        >
-                            <Ionicons name="md-return-up-back-outline" size={35} color={StandardTheme.White} style={modalStyles.backForm}/>
-                        </Pressable>
-                        <View style={modalStyles.LogoContainer}>
-                            <Text style={modalStyles.textLogo}>Create New <Text style={{color: StandardTheme.Purple}}>Reminder</Text></Text>
-                            <Text style={modalStyles.description}>Select Interval</Text>
-                        </View>
-
-                        <Picker
-                            placeholder='Interval'
-                            style={{width: '90%'}}
-                            onValueChange={(e) => {
-
-                            }}
-                            selectedValue={1}
-                        >
-                            {
-                                Intervals.length > 0 &&
-                                Intervals.map(el => {
-                                    return <Picker.Item label={el.title} value={el.id} key={el.id} color="white"/>
-                                })
-                            }
-                    
-                        </Picker>
-                        
-                        <View style={modalStyles.ButtonContainer}>
-                            <Button color={StandardTheme.Purple} text='Next' action={handleNextPageForm}/>
-                        </View>  
-                    </View>
-
-                    <View style={modalStyles.Container}>
-                        <Pressable
-                            onPress={handlePrevPageForm}
-                        >
-                            <Ionicons name="md-return-up-back-outline" size={35} color={StandardTheme.White} style={modalStyles.backForm}/>
-                        </Pressable>
-                        <View style={modalStyles.LogoContainer}>
-                            <Text style={modalStyles.textLogo}>Create New <Text style={{color: StandardTheme.Purple}}>Reminder</Text></Text>
-                            <Text style={modalStyles.description}>Select Date</Text>
-                        </View>
-
-                        <DateTimePicker
-                            mode='date'
-                            display="spinner"
-                            value={new Date()}
-                            onChange={() => {}}
-                        />
-                        
-                        <View style={modalStyles.ButtonContainer}>
-                            <Button color={StandardTheme.Purple} text='Next' action={handleNextPageForm}/>
-                        </View>  
-                    </View>
-
-                    <View style={modalStyles.Container}>
-                        <Pressable
-                            onPress={handlePrevPageForm}
-                        >
-                            <Ionicons name="md-return-up-back-outline" size={35} color={StandardTheme.White} style={modalStyles.backForm}/>
-                        </Pressable>
-                        <View style={modalStyles.LogoContainer}>
-                            <Text style={modalStyles.textLogo}>Create New <Text style={{color: StandardTheme.Purple}}>Reminder</Text></Text>
-                            <Text style={modalStyles.description}>Select Time</Text>
-                        </View>
-
-                        <DateTimePicker
-                            mode='time'
-                            display="spinner"
-                            value={new Date()}
-                            onChange={() => {}}
-                        />
-                        
-                        <View style={modalStyles.ButtonContainer}>
-                            <Button color={StandardTheme.Purple} text='Create' action={() => {}}/>
-                        </View>  
-                    </View>
-
-                </Animated.View>
-                
-            </Modal>
-
+            <ReminderCreateForm 
+                showModal={showModal}
+                setShowModal={setShowModal}
+                createReminder={createReminder}
+            />
         </View>
     )
 }
