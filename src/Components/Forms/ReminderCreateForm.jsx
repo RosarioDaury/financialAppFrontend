@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useContext } from "react";
 import { Pressable, View, Text, Modal, Animated, Dimensions } from "react-native";
 
 import { Feather } from '@expo/vector-icons';
@@ -13,8 +13,15 @@ import Button from "../Button/Button";
 import useReminderIntervals from "../../Hooks/Remiders/useReminderIntervals";
 import { PagesCreateForm } from "./styles";
 import { StandardTheme } from "../../Styles/Theme";
+import ReminderServices from "../../Services/ReminderServices";
+import { formatTimeHour } from "../../Utils/formatDate";
+import { AuthContext } from "../../Context/UserContext";
+import { createScheduledNotification } from "../../Utils/PushNotifications";
 
-const ReminderCreateForm = ({showModal, setShowModal, createReminder}) => {
+const service = new ReminderServices();
+
+const ReminderCreateForm = ({showModal, setShowModal, afterCreateReminder}) => {
+    const { User } = useContext(AuthContext);
     const [reminder, setReminder] = useState({
         amount: '',
         interval_id: 1,
@@ -58,6 +65,45 @@ const ReminderCreateForm = ({showModal, setShowModal, createReminder}) => {
             setFormTranslateValue(formTranslateValue - 0.25)
         }
     };
+
+    const createReminder = async () => {
+        try {
+            const {
+                amount,
+                interval_id,
+                date,
+                time,
+                title,
+                description
+            } = reminder;
+
+            const body = {
+                amount,
+                interval_id,
+                date: `${date.toISOString().split('T')[0]}${formatTimeHour(time)}`,
+                title,
+                description
+            }
+            
+            const record = await service.CreateReminder({body, token: User.token});            
+            await createScheduledNotification({date: body.date, title, description, interval: interval_id, reminderId: record.data.id});
+            
+            setShowModal(false);
+            setReminder({
+                amount: null,
+                interval_id: 1,
+                date: new Date(),
+                time: new Date(),
+                title: '',
+                description: ''
+            })
+            
+            afterCreateReminder()
+        } catch(error) {
+            console.log(error, 'REMINDER ERROR HERE');
+            Alert.alert('Error while creating REMINDER, try later');
+        }
+    }
 
     return (
         <Modal
@@ -229,7 +275,7 @@ const ReminderCreateForm = ({showModal, setShowModal, createReminder}) => {
                         reminder.time
                         ?
                             <View style={PagesCreateForm.ButtonContainer}>
-                                <Button color={StandardTheme.Purple} text='Create' action={() => createReminder({reminder, setReminder})}/>
+                                <Button color={StandardTheme.Purple} text='Create' action={createReminder}/>
                             </View> 
                         :
                             <View style={PagesCreateForm.ButtonContainer}>

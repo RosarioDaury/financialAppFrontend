@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useContext, useState } from "react"
 import { ScrollView, Text, View, Modal, Pressable} from "react-native"
 
 import Input from "../Input/Input"
@@ -9,10 +9,38 @@ import { SimpleCreateForm } from "./styles"
 import { Feather } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons'; 
 import { AntDesign } from '@expo/vector-icons';
+import TransactionServices from "../../Services/TransactionServices"
+import getCurrentDateTime from "../../Utils/generateDate"
+import { AuthContext } from "../../Context/UserContext"
 
+const service = new TransactionServices()
 
-const IncomeCreateForm =  ({showModal, setShowModal, createIncome}) => {
-    const [income, setIncome] = useState({title: '', description: '', amount: ''});
+const defaultIncomeValue = {title: '', description: '', amount: ''}
+const IncomeCreateForm =  ({showModal, setShowModal, afterCreateIncome}) => {
+    const { User } = useContext(AuthContext);
+    const [income, setIncome] = useState(defaultIncomeValue);
+
+    const createIncome = async () => {
+        try {
+            const {title, description, amount} = income;
+            const body = {
+                date: getCurrentDateTime(),
+                title,
+                description,
+                amount,
+                type_id: 1
+            }
+            
+            await service.CreateTransaction({body, token: User.token})
+            setShowModal(false);
+            setIncome(defaultIncomeValue)
+            afterCreateIncome();
+        } catch(error) {
+            console.log(error);
+            Alert.alert('Error while creating transaction, try later');
+        }
+    }
+
 
     return(
         <Modal
@@ -70,7 +98,7 @@ const IncomeCreateForm =  ({showModal, setShowModal, createIncome}) => {
                         income.title && income.description && income.amount
                             ?
                                 <View style={SimpleCreateForm.ButtonContainer}>
-                                    <Button color={StandardTheme.Green} text='Create' action={() => createIncome({income})}/>
+                                    <Button color={StandardTheme.Green} text='Create' action={createIncome}/>
                                 </View>
                             : 
                                 <View style={SimpleCreateForm.ButtonContainer}>

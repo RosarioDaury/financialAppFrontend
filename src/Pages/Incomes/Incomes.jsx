@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Pressable, View, Text, Alert } from "react-native";
 
 import { StandardTheme } from '../../Styles/Theme';
@@ -8,20 +8,15 @@ import { AntDesign } from '@expo/vector-icons';
 
 import Input from "../../Components/Input/Input";
 
-import { AuthContext } from "../../Context/UserContext";
 import { SwipeListView } from "react-native-swipe-list-view";
 import { styles } from "./styles";
 import useTransactionsByType from "../../Hooks/Transactions/useTransactionsByType";
 import Pages from "../../Components/Pagination/Index";
 import IncomeCardDetailed from "../../Components/Cards/IncomeCardDetailed/Index";
-import TransactionServices from "../../Services/TransactionServices";
-import getCurrentDateTime from "../../Utils/generateDate";
 import IncomeCreateForm from "../../Components/Forms/IncomeCreateForm";
 
-const transactionServices = new TransactionServices();
 
 export default function Incomes({navigation}) {
-    const { User } = useContext(AuthContext);
     const [filters, setFilters] = useState({page: 1, pageSize: 5})
     const [showModal, setShowModal] = useState(false);
 
@@ -35,25 +30,9 @@ export default function Incomes({navigation}) {
         setFilters({...filters, page: filters.page - 1})
     }
 
-    const createIncome = async ({income}) => {
-        try {
-            const {title, description, amount} = income;
-            const body = {
-                date: getCurrentDateTime(),
-                title,
-                description,
-                amount,
-                type_id: 1
-            }
-            
-            await transactionServices.CreateTransaction({body, token: User.token})
-            setShowModal(false);
-            setFilters({page: 1, pageSize: 5});
-            fetchTransactions({filters, type: 1})
-        } catch(error) {
-            console.log(error);
-            Alert.alert('Error while creating transaction, try later');
-        }
+    const afterCreateIncome = async () => {
+        setFilters({page: 1, pageSize: 5});
+        fetchTransactions({filters, type: 1})
     }
 
     useEffect(() => {
@@ -119,7 +98,7 @@ export default function Incomes({navigation}) {
         <IncomeCreateForm 
             showModal  = {showModal}
             setShowModal = {setShowModal} 
-            createIncome = {createIncome}
+            afterCreateIncome = {afterCreateIncome}
         />
 
     </View>

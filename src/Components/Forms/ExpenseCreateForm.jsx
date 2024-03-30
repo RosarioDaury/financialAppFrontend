@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect, useRef, useContext } from "react"
 import { Modal, View, Animated, Dimensions, Pressable, Text, } from "react-native"
 import { RadioButton } from "react-native-paper";
 
@@ -14,9 +14,16 @@ import { StandardTheme } from "../../Styles/Theme"
 import useCategories from "../../Hooks/Categories/useCategories"
 import StatCard from "../../Components/Cards/StatCard/Index";
 import { PagesCreateForm } from "./styles";
+import TransactionServices from "../../Services/TransactionServices"
+import getCurrentDateTime from "../../Utils/generateDate";
+import { AuthContext } from "../../Context/UserContext";
 
-const ExpenseCreateForm = ({showModal, setShowModal, createExpense}) => {
-    const [expense, setExpense] = useState({title: '', description: '', amount: '', category: null});
+const service = new TransactionServices()
+
+const defaultOutcomeValues = {title: '', description: '', amount: '', category: null};
+const ExpenseCreateForm = ({showModal, setShowModal, afterCreateExpense}) => {
+    const { User } = useContext(AuthContext);
+    const [expense, setExpense] = useState(defaultOutcomeValues);
     const {Categories} = useCategories({filters: {page: 1, pageSize: 100, name: ''}});
 
     const { width, height } = Dimensions.get('window');
@@ -49,6 +56,28 @@ const ExpenseCreateForm = ({showModal, setShowModal, createExpense}) => {
         inputRange: [0, 1],
         outputRange: [0, width * -1], // Adjust the transform values
     });
+
+    const createExpense = async () => {
+        try {
+            const {title, description, amount, category} = expense;
+            const body = {
+                date: getCurrentDateTime(),
+                title,
+                description,
+                amount,
+                type_id: 2,
+                category_id: category,
+            }
+            
+            await service.CreateTransaction({body, token: User.token})
+            setShowModal(false);
+            setExpense(defaultOutcomeValues);
+            afterCreateExpense();
+        } catch(error) {
+            console.log(error);
+            Alert.alert('Error while creating transaction, try later');
+        }
+    }
 
     return(
         <Modal
@@ -163,9 +192,7 @@ const ExpenseCreateForm = ({showModal, setShowModal, createExpense}) => {
                             <Button 
                                 color={StandardTheme.Red} 
                                 text='Create' 
-                                action={() => {
-                                    createExpense({expense, setExpense})
-                                }}/>
+                                action={createExpense}/>
                         </View>  
                         :
                         <View style={PagesCreateForm.ButtonContainer}>

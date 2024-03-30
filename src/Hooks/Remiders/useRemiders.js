@@ -12,13 +12,13 @@ const useReminders = ({filters = {}}) => {
 
     const fetchReminders = useCallback (async ({filters}) => {
         try {
-            const {data, pagination, success, message} = await SERVICE.GetReminder({token: User.token, filters});
+            const {data, pagination, success, error} = await SERVICE.GetReminder({token: User.token, filters});
 
             if(!success) {
-                console.log(message);
+                console.log(error);
                 setReminders([]);
                 setPagination({});
-                setError(message);
+                setError(error);
                 return
             }
 

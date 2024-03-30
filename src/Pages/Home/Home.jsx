@@ -1,5 +1,5 @@
-import React, {useContext, useEffect} from 'react';
-import { View, ScrollView, Text, Dimensions} from 'react-native';
+import React, {useContext, useEffect, useState} from 'react';
+import { View, ScrollView, Text, Dimensions, Alert} from 'react-native';
 
 import { StandardTheme } from '../../Styles/Theme';
 import Button from '../../Components/Button/Button';
@@ -15,13 +15,23 @@ import Navbar from '../../Components/Navbar/Index';
 import { BarChart, PieChart } from 'react-native-chart-kit';
 import useCategoriesChart from '../../Hooks/Categories/useCategoriesChart';
 import { useIsFocused } from '@react-navigation/native';
+import IncomeCreateForm from '../../Components/Forms/IncomeCreateForm';
+import ExpenseCreateForm from '../../Components/Forms/ExpenseCreateForm';
+import { askNotificationsPermissions } from '../../Utils/PushNotifications';
 
 const Home = ({navigation}) => {
     const { User, IsAuth } = useContext(AuthContext);
+
+    const [showModalIncome, setShowModalIncome] = useState(false); 
+    const [showModalOutcome, setShowModalOutcome] = useState(false)
+
     const {IncomeTotal, OutcomeTotal, fetchTransactionTotals, error} = useTransactionTotals();
     const {data: dataChart, fetchCategoriesChart, error: errorChart} = useCategoriesChart();
     const useFocused = useIsFocused();
 
+    useEffect(() => {
+        askNotificationsPermissions()
+    }, [])
 
     useEffect(() => {
         fetchTransactionTotals();
@@ -75,7 +85,7 @@ const Home = ({navigation}) => {
                                     color={'#ffffff1a'} 
                                     text="Deposit" 
                                     action={() => {
-                                        navigation.navigate('Incomes')
+                                        setShowModalIncome(true)
                                     }}
                                 />
                             </View>
@@ -85,7 +95,7 @@ const Home = ({navigation}) => {
                                     color={'#ffffff1a'} 
                                     text="Withdraw" 
                                     action={() => {
-                                        navigation.navigate('Expenses')
+                                        setShowModalOutcome(true)
                                     }}
                                 />
                             </View>
@@ -174,6 +184,23 @@ const Home = ({navigation}) => {
                 </View>                
 
             </ScrollView>
+                    
+            <IncomeCreateForm
+                showModal={showModalIncome}
+                setShowModal={setShowModalIncome}
+                afterCreateIncome={() => {
+                    Alert.alert('New Income Created')
+                }}
+            />
+
+            <ExpenseCreateForm 
+                showModal={showModalOutcome}
+                setShowModal={setShowModalOutcome}
+                afterCreateIncome={() => {
+                    Alert.alert('New Expense Created')
+                }}
+            />
+
             
             <Navbar navigation={navigation}/>
         </View>

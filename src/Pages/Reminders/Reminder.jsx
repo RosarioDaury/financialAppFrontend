@@ -1,5 +1,5 @@
-import { Pressable, View, Text } from "react-native";
-import { useState, useContext, useEffect } from "react";
+import { Pressable, View, Text, Alert } from "react-native";
+import { useState, useEffect, useContext } from "react";
 import { reminderStyles } from "./styles";
 import { StandardTheme } from "../../Styles/Theme";
 import Input from "../../Components/Input/Input";
@@ -13,17 +13,21 @@ import { SwipeListView } from "react-native-swipe-list-view";
 import ReminderCard from "../../Components/Cards/RemiderCard/Index";
 import UpdateDeleteHide from "../../Components/UpdateHide/UpdateDeleteHide";
 import ReminderCreateForm from "../../Components/Forms/ReminderCreateForm";
-import { formatTimeHour, formatTimeOnly } from "../../Utils/formatDate";
-import { AuthContext } from "../../Context/UserContext";
 import ReminderServices from "../../Services/ReminderServices";
+import ReminderUpdateForm from "../../Components/Forms/ReminderUpdateForm";
+import { removeScheduledNotification } from "../../Utils/PushNotifications";
+import { AuthContext } from "../../Context/UserContext";
 
 const reminderServices = new ReminderServices();
 
 export default function Reminders({navigation}) {
     const { User } = useContext(AuthContext);
-    const [filters, setFilters] = useState({page: 1, pageSize: 5, name: ""})
+
+    const [filters, setFilters] = useState({page: 1, pageSize: 5, title: ""})
     const {Reminders, Pagination, fetchReminders, error} = useReminders({filters})
     const [showModal, setShowModal] = useState(false);
+    const [showModalUpdate, setShowModalUpdate] = useState(false);
+    const [idToUpdate, setIdToUpdate] = useState(null);
     
 
     const handleNext = () => {
@@ -34,51 +38,47 @@ export default function Reminders({navigation}) {
         setFilters({...filters, page: filters.page - 1})
     }
 
-    const createReminder = async ({reminder, setReminder}) => {
-        try {
-            const {
-                amount,
-                interval_id,
-                date,
-                time,
-                title,
-                description
-            } = reminder;
+    const afterCreateReminder = () => {
+        setFilters({page: 1, pageSize: 5});
+        fetchReminders({filters});
+    }
 
-            const body = {
-                amount,
-                interval_id,
-                date: `${date.toISOString().split('T')[0]}${formatTimeHour(time)}`,
-                title,
-                description
-            }
-            console.log(body)
-
-            await reminderServices.CreateReminder({body, token: User.token})
-            setShowModal(false);
-            setFilters({page: 1, pageSize: 5});
+    const updateReminder = async ({reminder}) => {
+        try{    
+            await reminderServices.UpdateReminder({token: User.token, id: idToUpdate, body: reminder});
+            setShowModalUpdate(false);
             fetchReminders({filters});
-            setReminder({
-                amount: '',
-                interval_id: 1,
-                date: new Date(),
-                time: new Date(),
-                title: '',
-                description: ''
-            })
-
         } catch(error) {
             console.log(error);
-            Alert.alert('Error while creating REMINDER, try later');
+            Alert.alert('Error while updating REMINDER, try later');
         }
     }
+    
+    const handleDelete = async ({id, notificationId}) => {
+        try{
+            await reminderServices.DeleteReminder({token: User.token, id});
+            await removeScheduledNotification({notificationId})
+            fetchReminders({filters})
+        } catch(error) {
+            console.log(error)
+            Alert.alert('Error while deleting REMINDER')
+        }
+    }
+
+    const handleOpenUpdate = ({id}) => {
+        setIdToUpdate(id);
+        setShowModalUpdate(true);
+    }
+
+    useEffect(() => {
+        fetchReminders({filters})
+    }, [filters])
 
     useEffect(() => {
         if(error) {
             Alert.alert(error)
         }
     }, [error])
-
 
     return(
         <View style={{height: '100%', width: '98%', alignSelf: 'center'}}>
@@ -111,8 +111,8 @@ export default function Reminders({navigation}) {
                     placeholder='Search' 
                     Icon={<AntDesign name="search1" size={15} color={StandardTheme.DarkBlue} />}
                     type='default'    
-                    onChange={(e) => setFilters({...filters, name: e})}
-                    value={filters.name}
+                    onChange={(e) => setFilters({...filters, title: e})}
+                    value={filters.title}
                 />
             </View>
 
@@ -127,7 +127,7 @@ export default function Reminders({navigation}) {
                     <ReminderCard data={data.item}/>
                 )}
                 renderHiddenItem={ (data, rowMap) => (
-                    <UpdateDeleteHide data={data.item} handleDelete={() => {}}/>
+                    <UpdateDeleteHide data={data.item} handleDelete={handleDelete} handleUpdate={handleOpenUpdate} />
                 )}
                 rightOpenValue={-85}
                 leftOpenValue={85}
@@ -139,7 +139,14 @@ export default function Reminders({navigation}) {
             <ReminderCreateForm 
                 showModal={showModal}
                 setShowModal={setShowModal}
-                createReminder={createReminder}
+                afterCreateReminder={afterCreateReminder}
+            />
+
+            <ReminderUpdateForm 
+                showModal={showModalUpdate}
+                setShowModal={setShowModalUpdate}
+                id={idToUpdate}
+                updateReminder={updateReminder}
             />
         </View>
     )

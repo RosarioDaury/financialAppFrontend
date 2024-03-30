@@ -10,7 +10,6 @@ import { MaterialIcons } from '@expo/vector-icons';
 import {Picker} from '@react-native-picker/picker';
 import Input from '../../Components/Input/Input';
 import Button from '../../Components/Button/Button';
-import { useIsFocused } from '@react-navigation/native'
 
 import useAccountTypes from '../../Hooks/AccountTypes/useAccountTypes';
 import useSubmitUser from '../../Hooks/User/useSubmitUser';
@@ -22,8 +21,8 @@ const defaultBody = {
         firstName: "",
         lastName: "",
         email: "",
-        userType: 1,
-        balance: 0,
+        type_id: 1,
+        balance: '',
     }
 
 const SignUp = ({navigation}) => {
@@ -31,16 +30,15 @@ const SignUp = ({navigation}) => {
     const {accountTypes} = useAccountTypes();
     const {createUser, Error, Success} = useSubmitUser();
 
-    const isFocused = useIsFocused()
-
     const create = async () => {
         const {
             passwordConfirm,
             password
         } = Body;
         if(password == passwordConfirm) {
-            createUser(Body)
-            console.log(Error, Success)
+            createUser({form: Body})
+            setBody(defaultBody);
+            navigation.navigate('Login');
         } else {
             Alert.alert("Passwords do not match")
         }
@@ -138,17 +136,17 @@ const SignUp = ({navigation}) => {
                     placeholder='Budget' 
                     Icon={<MaterialIcons name="attach-money" size={15} color={StandardTheme.DarkBlue} />} 
                     type='number-pad'
-                    onChange={(e) => setBody({...Body, Budget: e})}
-                    value={Body.Budget}
+                    onChange={(e) => setBody({...Body, balance: e})}
+                    value={Body.balance}
                 />
                 
                 <Picker
                     placeholder='Account Type'
                     style={{width: '80%'}}
                     onValueChange={(e) => {
-                        setBody({...Body, userType: e})
+                        setBody({...Body, type_id: e})
                     }}
-                    selectedValue={Body.userType}
+                    selectedValue={Body.type_id}
                     
                 >
                     {

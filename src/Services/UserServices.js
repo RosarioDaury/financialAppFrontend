@@ -32,14 +32,8 @@ class UserServices {
     }
 
     CreateUser = async (body) => {
-        try{
-            const {Message, error} = await axios.post(`${BASE_URL}/user/create`, body);
-            return {Message, error}
-        }catch(error) {
-            console.log(err.response.data.error);
-            Alert.alert(err.response.data.error);
-        }
-        
+        const data = await axios.post(`${BASE_URL}/user/create`, body);
+        return data
     }
 
     updateUser = async ({token, body}) => {

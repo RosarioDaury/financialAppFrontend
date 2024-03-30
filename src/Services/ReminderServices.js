@@ -16,6 +16,15 @@ class ReminderServices {
         }
     }
 
+    GetReminderById = async({token, id}) => {
+        try{
+            const {data} = await axios.get(`${this.BASE_URL}/reminder/get/${id}`,{ headers: { token }})
+            return data
+        } catch(error) {
+            return error.response.data
+        }
+    }
+
     GetReminderIntervals = async () => {
         try{
             const {data} = await axios.get(`${this.BASE_URL}/interval/get`);
@@ -30,21 +39,24 @@ class ReminderServices {
     }
 
     UpdateReminder = async ({token, id, body}) => {
-        try{
-            const {data} = await axios.put(`${this.BASE_URL}/reminder/update/${id}`, body, { headers: { token }})
-            return data
-        } catch(error) {
-            return e.response.data
-        }
+        return await axios.put(`${this.BASE_URL}/reminder/update/${id}`, body, { headers: { token }})
     }
 
     DeleteReminder = async ({token, id}) => {
-        try{
-            const {data} = await axios.delete(`${this.BASE_URL}/reminder/delete/${id}`,{ headers: { token }})
-            return data
-        } catch(error) {
-            return e.response.data
-        }
+        return await axios.delete(`${this.BASE_URL}/reminder/delete/${id}`,{ headers: { token }})
+    }
+
+    CreateReminderNotification = async ({notification}) => {
+        return await axios.post(`${this.BASE_URL}/reminder/notification/create`, notification);
+    }
+
+    UpdateReminderNotification = async ({currentId, newId}) => {
+        return await axios.put(`${this.BASE_URL}/reminder/notification/update`, {currentId, newId});
+    }
+
+    DeleteReminderNotification = async ({id}) => {
+        return await axios.delete(`${this.BASE_URL}/reminder/notification/delete/${id}`);
+
     }
 }
 

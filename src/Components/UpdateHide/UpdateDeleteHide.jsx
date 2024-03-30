@@ -2,7 +2,7 @@
 import { Pressable, View, Text} from "react-native";
 import { StandardTheme } from "../../Styles/Theme";
 
-const UpdateDeleteHide = ({data, handleUpdate}) => {
+const UpdateDeleteHide = ({data, handleDelete, handleUpdate}) => {
     return(
         <View
             style={{
@@ -43,7 +43,7 @@ const UpdateDeleteHide = ({data, handleUpdate}) => {
                     justifyContent: 'center'
                 }}
                 onPress={() => {
-                    handleUpdate({id: data.id})
+                    handleDelete({id: data.id, notificationId: data.externalId})
                 }}
             >
                 <Text style={{fontWeight: 'bold', color: 'white'}}>Delete</Text>

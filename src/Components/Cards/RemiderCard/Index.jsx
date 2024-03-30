@@ -21,7 +21,7 @@ export default function ReminderCard({data}) {
 
                 <View>
                     <Text style={styles.amount}>{formatCurrency({amount: data.amount, decimals: true})}</Text>
-                    <Text style={styles.description}>{data?.interval?.title}</Text>
+                    <Text style={styles.description}>{data.intervalTitle}</Text>
                 </View>
 
             </View> 

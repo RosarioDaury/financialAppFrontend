@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Pressable, View, Text, Alert } from "react-native";
 
 import { StandardTheme } from '../../Styles/Theme';
@@ -8,7 +8,6 @@ import { AntDesign } from '@expo/vector-icons';
 
 
 import Input from "../../Components/Input/Input";
-import { AuthContext } from "../../Context/UserContext";
 import { SwipeListView } from "react-native-swipe-list-view";
 import { styles } from "./styles";
 import useTransactionsByType from "../../Hooks/Transactions/useTransactionsByType";
@@ -16,13 +15,9 @@ import Pages from "../../Components/Pagination/Index";
 import ExpensesCardDetailed from "../../Components/Cards/ExpensesCardDetailed/Index";
 import ExpenseCreateForm from "../../Components/Forms/ExpenseCreateForm";
 
-import TransactionServices from "../../Services/TransactionServices";
-import getCurrentDateTime from "../../Utils/generateDate";
 
-const transactionServices = new TransactionServices();
 
 export default function Expenses({navigation}) {
-    const { User } = useContext(AuthContext);
     const [filters, setFilters] = useState({page: 1, pageSize: 5})
     const [showModal, setShowModal] = useState(false);
     const { Transactions, Pagination: pagination, fetchTransactions, error} = useTransactionsByType({filters, type: 2});
@@ -40,27 +35,9 @@ export default function Expenses({navigation}) {
         fetchTransactions({filters, type: 2})
     }, [filters])
 
-    const createExpense = async ({expense, setExpense}) => {
-        try {
-            const {title, description, amount, category} = expense;
-            const body = {
-                date: getCurrentDateTime(),
-                title,
-                description,
-                amount,
-                type_id: 2,
-                category_id: category,
-            }
-            
-            await transactionServices.CreateTransaction({body, token: User.token})
-            setShowModal(false);
-            setFilters({page: 1, pageSize: 5});
-            fetchTransactions({filters, type: 2})
-            setExpense({title: '', description: '', amount: '', category: null})
-        } catch(error) {
-            console.log(error);
-            Alert.alert('Error while creating transaction, try later');
-        }
+    const afterCreateExpense = async () => {
+        setFilters({page: 1, pageSize: 5});
+        fetchTransactions({filters, type: 2})
     }
 
     useEffect(() => {
@@ -122,7 +99,7 @@ export default function Expenses({navigation}) {
         <ExpenseCreateForm 
             showModal = {showModal}
             setShowModal = {setShowModal}
-            createExpense = {createExpense}
+            afterCreateExpense = {afterCreateExpense}
         />
     </View>
 )

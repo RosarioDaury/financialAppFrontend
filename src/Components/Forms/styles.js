@@ -6,7 +6,7 @@ export const SimpleCreateForm = StyleSheet.create({
     Container:{
         padding: 25,
         zIndex: 10,
-        backgroundColor: StandardTheme.DarkBlue,
+        backgroundColor: StandardTheme.DarkBlue
     },  
     Header:{
         marginTop: 40,
@@ -66,7 +66,8 @@ export const SimpleCreateForm = StyleSheet.create({
         gap: 5,
         width: '40%',
         alignSelf:'flex-end',
-        marginTop: 100
+        marginTop: 50,
+        marginBottom: 100
     },
 })
 
@@ -135,7 +136,7 @@ export const PagesCreateForm = StyleSheet.create({
         gap: 5,
         width: '40%',
         alignSelf:'flex-end',
-        marginTop: 100
+        marginTop: 50
     },
     ContainerCategory: {
         padding: 25,
