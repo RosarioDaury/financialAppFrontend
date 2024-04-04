@@ -1,11 +1,14 @@
 import {BASE_URL, SECRET_KEY} from '@env';
 import axios from 'axios';
 import { Alert } from 'react-native';
-// import jwtDecode from 'jwt-decode';
-//LocalURL: string = 'http://192.168.0.107:3000';
 class UserServices {
     constructor() {
         this.BASE_URL = BASE_URL
+    }
+
+    GetUser = async ({token}) => {
+        const data = await axios.get(`${BASE_URL}/user/get`, {headers: {token}});
+        return data;
     }
 
     GetUserTypes = async () => {

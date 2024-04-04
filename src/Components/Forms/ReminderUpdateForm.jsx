@@ -12,7 +12,7 @@ import Button from "../Button/Button";
 import { StandardTheme } from "../../Styles/Theme";
 import useReminderById from "../../Hooks/Remiders/useReminderById";
 import { SimpleCreateForm } from "./styles";
-import { formatTimeHour } from "../../Utils/formatDate";
+import { formatDate, formatTimeHour } from "../../Utils/formatDate";
 import { createScheduledNotification, removeScheduledNotification, scheduleNextNotification } from "../../Utils/PushNotifications";
 import ReminderServices from "../../Services/ReminderServices";
 
@@ -45,17 +45,17 @@ const ReminderUpdateForm = ({showModal, setShowModal, id, updateReminder}) => {
                 title,
                 description,
                 amount,
-                date: `${date.toISOString().split('T')[0]}${formatTimeHour(time)}`
+                date: `${formatDate(date)}${formatTimeHour(time)}`
             }
 
             // UPDATING CURRENT REMINDER
-            await updateReminder({reminder})
             // REMOVING NOTIFICATION SCHEDULED WITH EXPO TO STOP IT FROM TRIGGERING
             await removeScheduledNotification({notificationId: externalId});
             // DELETE FROM DATABASE CURRENT REMINDER NOTIFICATION
             // SCHEDULING NEW NOTIFICATION FROM THE UPDATED REMINDER INFORMATION THE REMINDER NOTIFICATION
-            const newNotification = await createScheduledNotification({interval: interval_id, title, description, reminderId: id, date: reminder.date})
             await reminderServices.DeleteReminderNotification({id: externalId})
+            await createScheduledNotification({interval: interval_id, title, description, reminderId: id, date: reminder.date})
+            await updateReminder({reminder})
         } catch(error) {
             console.log(error)
             Alert.alert('ERROR WHILE UPDATING REMINDER')

@@ -78,7 +78,7 @@ const ExpenseCreateForm = ({showModal, setShowModal, afterCreateExpense}) => {
             Alert.alert('Error while creating transaction, try later');
         }
     }
-
+    
     return(
         <Modal
             visible={showModal}

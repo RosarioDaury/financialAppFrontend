@@ -196,8 +196,10 @@ const Home = ({navigation}) => {
             <ExpenseCreateForm 
                 showModal={showModalOutcome}
                 setShowModal={setShowModalOutcome}
-                afterCreateIncome={() => {
+                afterCreateExpense ={() => {
                     Alert.alert('New Expense Created')
+                    fetchTransactionTotals()
+                    fetchCategoriesChart()
                 }}
             />
 

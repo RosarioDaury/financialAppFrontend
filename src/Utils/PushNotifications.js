@@ -3,8 +3,10 @@ import { Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ReminderServices from '../Services/ReminderServices';
 import { formatTimeHour } from './formatDate';
+import EmailHandler from '../Services/EmailHandler';
 
 const reminderServices = new ReminderServices();
+const emailHandler = new EmailHandler();
 
 const intervals = {
     weekly: 7 * 24 * 60 * 60,
@@ -35,8 +37,12 @@ const askNotificationsPermissions = async () => {
             finalStatus = status;
         } else {
             // Every time a push notificaion is received this will scheduled the next one depending on the interval selected
-            Notifications.addNotificationReceivedListener(notification => {
+            Notifications.addNotificationReceivedListener(async (notification) => {
                 const {interval, title, description, reminderId} = notification.request.content.data;
+                await emailHandler.SendEmail({body: {
+                    title,
+                    body: description
+                }})
                 const { identifier } = notification.request;
                 scheduleNextNotification({interval, title, description, identifier, reminderId});
             });
@@ -49,9 +55,13 @@ const askNotificationsPermissions = async () => {
         }
 
         // Every time a push notificaion is received this will scheduled the next one depending on the interval selected
-        Notifications.addNotificationReceivedListener(notification => {
+        Notifications.addNotificationReceivedListener(async (notification) => {
             const {interval, title, description, reminderId} = notification.request.content.data;
-            const { identifier } = notification;
+            await emailHandler.SendEmail({body: {
+                title,
+                body: description
+            }})
+            const { identifier } = notification.request;
             scheduleNextNotification({interval, title, description, identifier, reminderId});
         });
         return finalStatus

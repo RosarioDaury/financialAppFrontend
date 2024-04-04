@@ -26,7 +26,7 @@ const AuthProvider = ({children}) => {
             if(auth){
 
                 try{
-                    let userData = JWT.decode(token, 'ROSD12', {timeSkew: 30});
+                    let userData = JWT.decode(token, SECRET_KEY, {timeSkew: 30});
                     setUser({...userData, token: token});
                     setIsAuth(true);    
                     await AsyncStorage.setItem('token', token);
@@ -46,9 +46,22 @@ const AuthProvider = ({children}) => {
     }   
 
     const setUserFromToken = async ({token}) => {
-        let userData = JWT.decode(token, SECRET_KEY, {timeSkew: 30});
-        setUser({...userData, token: token})
-        setIsAuth(true);
+        try {
+            const response = await Service.GetUser({token});
+            const {data: {data, success}} = response;
+
+            if(!success) {
+                throw Error('INVALID USERS')
+            }
+
+            setUser({...data, token});
+            setIsAuth(true);
+        } catch(error) {
+            console.log('ERROR', error)
+            setUser({});
+            setIsAuth(false)
+            await AsyncStorage.removeItem('token')
+        }
     }
 
     const value = {User, setUser, IsAuth, setIsAuth, logOut, logIn, setUserFromToken };

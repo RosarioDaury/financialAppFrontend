@@ -6,7 +6,6 @@ const formatter = new Intl.DateTimeFormat('en', {
 });
 
 function formatTimeOnly(dateTime) {
-    // console.log(new Date(dateTime))
     let date = new Date(dateTime);    
     const options = { hour: 'numeric', minute: 'numeric', hour12: true };
     return new Intl.DateTimeFormat('en-US', options).format(date);
@@ -26,9 +25,17 @@ function formatDateOnly(dateTime = new Date()) {
     return new Intl.DateTimeFormat('en-US', options).format(date);
 }
 
+function formatDate(dateTime = new Date()) {
+    let date = new Date(dateTime);    
+    const options = { year: 'numeric', month: 'numeric', day: 'numeric' };
+    return new Intl.DateTimeFormat("fr-CA", options).format(date);
+}
+
+
 
 export {
     formatTimeOnly,
     formatDateOnly,
-    formatTimeHour
+    formatTimeHour,
+    formatDate
 }

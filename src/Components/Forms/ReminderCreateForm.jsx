@@ -14,7 +14,7 @@ import useReminderIntervals from "../../Hooks/Remiders/useReminderIntervals";
 import { PagesCreateForm } from "./styles";
 import { StandardTheme } from "../../Styles/Theme";
 import ReminderServices from "../../Services/ReminderServices";
-import { formatTimeHour } from "../../Utils/formatDate";
+import { formatDate, formatTimeHour } from "../../Utils/formatDate";
 import { AuthContext } from "../../Context/UserContext";
 import { createScheduledNotification } from "../../Utils/PushNotifications";
 
@@ -80,7 +80,7 @@ const ReminderCreateForm = ({showModal, setShowModal, afterCreateReminder}) => {
             const body = {
                 amount,
                 interval_id,
-                date: `${date.toISOString().split('T')[0]}${formatTimeHour(time)}`,
+                date: `${formatDate(date)}${formatTimeHour(time)}`,
                 title,
                 description
             }

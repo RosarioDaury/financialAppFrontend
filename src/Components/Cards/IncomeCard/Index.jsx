@@ -7,6 +7,8 @@ import Carousel from "../../Carousel/Index";
 import useTransactionsByType from "../../../Hooks/Transactions/useTransactionsByType";
 import {formatDateOnly} from "../../../Utils/formatDate";
 import formatCurrency from "../../../Utils/formatCurrency";
+import { useIsFocused } from "@react-navigation/native";
+import { useEffect } from "react";
 
 const IncomeCard = ({data}) => {
     return(
@@ -28,7 +30,12 @@ const IncomeCard = ({data}) => {
 
 
 const IncomeCardsSlider = () => {
-    const { Transactions, Pagination} = useTransactionsByType({filters: {}, type: 1})
+    const { Transactions, Pagination, fetchTransactions} = useTransactionsByType({filters: {}, type: 1})
+    const isFocused = useIsFocused();
+
+    useEffect(() => {
+        fetchTransactions({filters: {}, type: 1})
+    }, [isFocused])
 
     if(Transactions.length == 0 ) {
         return (
