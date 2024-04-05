@@ -15,6 +15,7 @@ import CategoryCard from "../../Components/Cards/CategoryCard/Index";
 import { styles } from "./styles";
 import DeleteHide from "../../Components/DeleteHide/DeleteHide";
 import CategoryCreateForm from "../../Components/Forms/CategoryCreateForm";
+import { ActivityIndicator } from "react-native-paper"
 
 const categoryService = new CategoryServices();
 
@@ -92,21 +93,33 @@ export default function Category({navigation}) {
           value={filters.name}
         />
       </View>
-      
-      <SwipeListView
-          data={Categories}
-          renderItem={ (data, rowMap) => (
-            <CategoryCard data={data.item}/>
-          )}
-          renderHiddenItem={ (data, rowMap) => (
-            <DeleteHide data={data.item} handleDelete={handleDelete}/>
-          )}
-          rightOpenValue={-85}
-          style={{
-            marginTop: 20
-          }}
-      />
 
+      {
+        Categories.length > 0
+        ?
+          <SwipeListView
+            data={Categories}
+            renderItem={ (data, rowMap) => (
+              <CategoryCard data={data.item}/>
+            )}
+            renderHiddenItem={ (data, rowMap) => (
+              <DeleteHide data={data.item} handleDelete={handleDelete}/>
+            )}
+            rightOpenValue={-85}
+            style={{
+              marginTop: 20
+            }}
+          />
+
+        :
+            error
+            ?
+              null
+            :
+              <ActivityIndicator size='large' style={{marginTop: 50}} color={StandardTheme.Grey}/>
+      }
+      
+      
       <CategoryCreateForm 
         showModal={showModal}
         setShowModal={setShowModal}

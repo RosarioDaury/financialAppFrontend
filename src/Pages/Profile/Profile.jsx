@@ -103,7 +103,6 @@ const Profile = ({navigation}) => {
                 <View
                     style={styles.mycategories}
                 >
-                    <Text style={styles.mycategoriestext}>My Categories</Text>
                     <Carousel
                         items={Categories.map(el => {
                             return (
@@ -205,7 +204,7 @@ const Profile = ({navigation}) => {
 
 const styles = StyleSheet.create({
     header: {
-        backgroundColor: StandardTheme.DarkBlue,
+        backgroundColor: StandardTheme.Blue,
         height: 220,
         position: 'relative',
         alignItems: 'center',
@@ -219,7 +218,7 @@ const styles = StyleSheet.create({
     },
     titleText: {
         fontSize: FontSizes.normal,
-        color: StandardTheme.DarkBlue,
+        color: StandardTheme.Blue,
         fontWeight: 'bold'
     },
     userinfofloat: {
@@ -230,7 +229,7 @@ const styles = StyleSheet.create({
         width: '100%',
         paddingHorizontal: 30, 
         paddingVertical: 30,
-        backgroundColor: StandardTheme.DarkBlue,
+        backgroundColor: StandardTheme.Blue,
         gap: 10,
     },
     edit: {

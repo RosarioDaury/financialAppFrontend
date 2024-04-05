@@ -10,6 +10,7 @@ class ReminderServices {
     GetReminder = async ({token, filters}) => {
         try{
             const {data} = await axios.get(`${this.BASE_URL}/reminder/get${generateQueryString(filters)}`,{ headers: { token }})
+            console.log('REMINDER', data)
             return data
         } catch(error) {
             return error.response.data
@@ -28,6 +29,7 @@ class ReminderServices {
     GetReminderIntervals = async () => {
         try{
             const {data} = await axios.get(`${this.BASE_URL}/interval/get`);
+            console.log('REMINDER INTERVALS', data)
             return data
         } catch(error) {
             return error.response.data

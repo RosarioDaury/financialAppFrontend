@@ -48,12 +48,9 @@ const ReminderUpdateForm = ({showModal, setShowModal, id, updateReminder}) => {
                 date: `${formatDate(date)}${formatTimeHour(time)}`
             }
 
-            // UPDATING CURRENT REMINDER
-            // REMOVING NOTIFICATION SCHEDULED WITH EXPO TO STOP IT FROM TRIGGERING
             await removeScheduledNotification({notificationId: externalId});
-            // DELETE FROM DATABASE CURRENT REMINDER NOTIFICATION
-            // SCHEDULING NEW NOTIFICATION FROM THE UPDATED REMINDER INFORMATION THE REMINDER NOTIFICATION
             await reminderServices.DeleteReminderNotification({id: externalId})
+
             await createScheduledNotification({interval: interval_id, title, description, reminderId: id, date: reminder.date})
             await updateReminder({reminder})
         } catch(error) {

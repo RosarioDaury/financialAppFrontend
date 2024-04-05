@@ -14,8 +14,7 @@ import useTransactionsByType from "../../Hooks/Transactions/useTransactionsByTyp
 import Pages from "../../Components/Pagination/Index";
 import ExpensesCardDetailed from "../../Components/Cards/ExpensesCardDetailed/Index";
 import ExpenseCreateForm from "../../Components/Forms/ExpenseCreateForm";
-
-
+import { ActivityIndicator } from "react-native-paper";
 
 export default function Expenses({navigation}) {
     const [filters, setFilters] = useState({page: 1, pageSize: 5})
@@ -47,7 +46,7 @@ export default function Expenses({navigation}) {
     }, [error])
 
     return(
-    <View style={{height: '100%', width: '98%', alignSelf: 'center'}}>
+    <View style={{height: '100%', width: '100%', alignSelf: 'center'}}>
         <View style={styles.header}>
             <Pressable
                 onPress={() => {
@@ -85,16 +84,27 @@ export default function Expenses({navigation}) {
 
         <Pages current={pagination.currentPage} totalPages={pagination.pages} handleNext={handleNext} handlePrev={handlePrev}/>
         
-        <SwipeListView
-            data={Transactions ? Transactions : []}
-            renderItem={ (data, rowMap) => (
-                <ExpensesCardDetailed data={data.item} />
-            )}
-            rightOpenValue={-85}
-            style={{
-                marginTop: 20
-            }}
-        />
+        {
+        Transactions.length > 0
+        ?
+            <SwipeListView
+                data={Transactions ? Transactions : []}
+                renderItem={ (data, rowMap) => (
+                    <ExpensesCardDetailed data={data.item}/>
+                )}
+                rightOpenValue={-85}
+                style={{
+                    marginTop: 20
+                }}
+            />
+
+        :
+            error
+            ?
+                null
+            :
+                <ActivityIndicator size='large' style={{marginTop: 50}} color={StandardTheme.Red}/>
+        }
 
         <ExpenseCreateForm 
             showModal = {showModal}

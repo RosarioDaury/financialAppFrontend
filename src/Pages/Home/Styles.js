@@ -41,7 +41,7 @@ export const Styles = StyleSheet.create({
         position: 'absolute',
         left:0,
         right:0,
-        top: 240,
+        top: 525,
         marginLeft: 'auto',
         marginRight: 'auto',
         alignItems: 'center',
@@ -79,17 +79,16 @@ export const Styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center', 
         alignItems: 'center',
-        marginTop: 50,
-        width: '98%',
-        padding: 20,
-        paddingTop: 25,
-        borderRadius: 10,
+        width: '100%',
         alignSelf: 'center',
-        backgroundColor: StandardTheme.DarkBlue
+        backgroundColor: StandardTheme.DarkBlue,
     },
     chartTitle: {
-        color: StandardTheme.White,
+        color: StandardTheme.Grey,
         fontWeight: 'bold',
-        fontSize: FontSizes.normal
+        fontSize: FontSizes.normal,
+        marginBottom: 20,
+        alignSelf: 'flex-start',
+        marginLeft: 20
     }
 })

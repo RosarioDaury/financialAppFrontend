@@ -9,15 +9,7 @@ const useReminderIntervals = () => {
 
     const fetchIntervals = useCallback (async () => {
         try {
-            const {data, success, message} = await SERVICE.GetReminderIntervals();
-
-            if(!success) {
-                console.log(message);
-                setIntervals([]);
-                setError(message);
-            }
-
-            setIntervals(data)
+            setIntervals([{id: 1, interval: 7, title: "Weekly"}, {id: 2, interval: 15, title: "Biweekly"}, {id: 3, interval: 30, title: "Monthly"}])
         } catch(error) {
             console.log(error);
             setIntervals([]);

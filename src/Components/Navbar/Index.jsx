@@ -65,14 +65,14 @@ function Navbar({navigation}) {
 const styles = (textColor) => StyleSheet.create({
     container: {
         backgroundColor: '#041e42da',
-        width: '99%',
-        height: '9%',
+        width: '98%',
+        height: '12%',
         position:'absolute',
-        bottom: 15,
+        bottom: 10,
         flexDirection: 'row',
         justifyContent: 'space-evenly',
         alignItems: 'center',
-        borderRadius: 40,
+        borderRadius: 50,
         alignSelf: 'center'
     },
     tab: {

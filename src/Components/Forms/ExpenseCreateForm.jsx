@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useContext } from "react"
-import { Modal, View, Animated, Dimensions, Pressable, Text, } from "react-native"
+import { Modal, View, Animated, Dimensions, Pressable, Text, Keyboard, } from "react-native"
 import { RadioButton } from "react-native-paper";
 
 import { Feather } from '@expo/vector-icons';
@@ -24,7 +24,7 @@ const defaultOutcomeValues = {title: '', description: '', amount: '', category: 
 const ExpenseCreateForm = ({showModal, setShowModal, afterCreateExpense}) => {
     const { User } = useContext(AuthContext);
     const [expense, setExpense] = useState(defaultOutcomeValues);
-    const {Categories} = useCategories({filters: {page: 1, pageSize: 100, name: ''}});
+    const {Categories, fetchCategories} = useCategories({filters: {page: 1, pageSize: 100, name: ''}});
 
     const { width, height } = Dimensions.get('window');
     const animatedValue = useRef(new Animated.Value(0)).current;
@@ -33,6 +33,12 @@ const ExpenseCreateForm = ({showModal, setShowModal, afterCreateExpense}) => {
         // Reset the animated value when the component mounts
         animatedValue.setValue(0);
     }, []);
+
+    useEffect(() => {
+        if(showModal){
+            fetchCategories({filters: {page: 1, pageSize: 100, name: ''}})
+        }
+    }, [showModal])
 
     const handleNextPageForm = () => {
         // Trigger a smooth transition when changing the transform value
@@ -72,6 +78,7 @@ const ExpenseCreateForm = ({showModal, setShowModal, afterCreateExpense}) => {
             await service.CreateTransaction({body, token: User.token})
             setShowModal(false);
             setExpense(defaultOutcomeValues);
+            animatedValue.setValue(0);
             afterCreateExpense();
         } catch(error) {
             console.log(error);
@@ -98,7 +105,11 @@ const ExpenseCreateForm = ({showModal, setShowModal, afterCreateExpense}) => {
                 <View style={PagesCreateForm.Container}>
 
                     <Pressable
-                        onPress={() => setShowModal(false)}
+                        onPress={() =>{ 
+                            setShowModal(false);
+                            setExpense(defaultOutcomeValues);
+                            animatedValue.setValue(0);
+                        }}
                         style={PagesCreateForm.Header}
                     >
                         <AntDesign name="down" size={30} color={StandardTheme.White}/>
@@ -130,7 +141,7 @@ const ExpenseCreateForm = ({showModal, setShowModal, afterCreateExpense}) => {
                         <Input 
                             placeholder='Amount' 
                             Icon={<MaterialIcons name="attach-money" size={20} color={StandardTheme.DarkBlue} />} 
-                            type='numeric'
+                            type='decimal-pad'
                             onChange={(e) => {setExpense({...expense, amount: e})}}
                             value={expense.amount}
                         />

@@ -22,6 +22,14 @@ const useReminders = ({filters = {}}) => {
                 return
             }
 
+            if(!data) {
+                console.log(data);
+                setReminders([]);
+                setPagination({});
+                setError('NOT DATA RETREIVED');
+                return
+            }
+
             setReminders(data)
             setPagination(pagination)
         } catch(error) {

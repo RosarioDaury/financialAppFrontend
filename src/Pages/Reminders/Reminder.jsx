@@ -17,6 +17,7 @@ import ReminderServices from "../../Services/ReminderServices";
 import ReminderUpdateForm from "../../Components/Forms/ReminderUpdateForm";
 import { removeScheduledNotification } from "../../Utils/PushNotifications";
 import { AuthContext } from "../../Context/UserContext";
+import { ActivityIndicator } from "react-native-paper";
 
 const reminderServices = new ReminderServices();
 
@@ -81,7 +82,7 @@ export default function Reminders({navigation}) {
     }, [error])
 
     return(
-        <View style={{height: '100%', width: '98%', alignSelf: 'center'}}>
+        <View style={{height: '100%', width: '100%', alignSelf: 'center'}}>
             <View style={reminderStyles.header}>
                 <Pressable
                     onPress={() => {
@@ -120,21 +121,34 @@ export default function Reminders({navigation}) {
                 Pagination && 
                 <Pages current={Pagination.currentPage} totalPages={Pagination.pages} handleNext={handleNext} handlePrev={handlePrev}/>
             }
+
+            {
+                Reminders.length > 0
+                ?
+                    <SwipeListView
+                        data={Reminders}
+                        renderItem={ (data, rowMap) => (
+                            <ReminderCard data={data.item}/>
+                        )}
+                        renderHiddenItem={ (data, rowMap) => (
+                            <UpdateDeleteHide data={data.item} handleDelete={handleDelete} handleUpdate={handleOpenUpdate} />
+                        )}
+                        rightOpenValue={-85}
+                        leftOpenValue={85}
+                        style={{
+                            marginTop: 20
+                        }}
+                    />
+                :
+                error
+                ?
+                    null
+                :
+                    <ActivityIndicator size='large' style={{marginTop: 50}} color={StandardTheme.Purple}/>
+            }
+
             
-            <SwipeListView
-                data={Reminders}
-                renderItem={ (data, rowMap) => (
-                    <ReminderCard data={data.item}/>
-                )}
-                renderHiddenItem={ (data, rowMap) => (
-                    <UpdateDeleteHide data={data.item} handleDelete={handleDelete} handleUpdate={handleOpenUpdate} />
-                )}
-                rightOpenValue={-85}
-                leftOpenValue={85}
-                style={{
-                    marginTop: 20
-                }}
-            />
+            
 
             <ReminderCreateForm 
                 showModal={showModal}

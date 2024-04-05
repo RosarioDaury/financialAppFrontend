@@ -20,16 +20,17 @@ import { createScheduledNotification } from "../../Utils/PushNotifications";
 
 const service = new ReminderServices();
 
+const defaultValues = {
+    amount: null,
+    interval_id: 1,
+    date: new Date(),
+    time: new Date(),
+    title: '',
+    description: ''
+}
 const ReminderCreateForm = ({showModal, setShowModal, afterCreateReminder}) => {
     const { User } = useContext(AuthContext);
-    const [reminder, setReminder] = useState({
-        amount: '',
-        interval_id: 1,
-        date: new Date(),
-        time: new Date(),
-        title: '',
-        description: ''
-    })
+    const [reminder, setReminder] = useState(defaultValues)
 
     const {Intervals} = useReminderIntervals();
     const animatedValue = useRef(new Animated.Value(0)).current;
@@ -98,6 +99,7 @@ const ReminderCreateForm = ({showModal, setShowModal, afterCreateReminder}) => {
                 description: ''
             })
             
+            animatedValue.setValue(0)
             afterCreateReminder()
         } catch(error) {
             console.log(error, 'REMINDER ERROR HERE');
@@ -111,7 +113,9 @@ const ReminderCreateForm = ({showModal, setShowModal, afterCreateReminder}) => {
             animationType='slide'
             transparent={true}
             onRequestClose={() => {
-                setShowModal(false)
+                setShowModal(false);
+                animatedValue.setValue(0);
+                setReminder(defaultValues)
             }}
         >   
 
@@ -126,7 +130,11 @@ const ReminderCreateForm = ({showModal, setShowModal, afterCreateReminder}) => {
                 <View style={PagesCreateForm.Container}>
 
                     <Pressable
-                        onPress={() => setShowModal(false)}
+                        onPress={() => {
+                            setShowModal(false)
+                            animatedValue.setValue(0);
+                            setReminder(defaultValues)
+                        }}
                         style={PagesCreateForm.Header}
                     >
                         <AntDesign name="down" size={30} color={StandardTheme.White}/>
@@ -192,7 +200,7 @@ const ReminderCreateForm = ({showModal, setShowModal, afterCreateReminder}) => {
 
                     <Picker
                         placeholder='Interval'
-                        style={{width: '90%'}}
+                        style={{width: '100%'}}
                         onValueChange={(e) => {
                             setReminder({...reminder, interval_id: e})
                         }}

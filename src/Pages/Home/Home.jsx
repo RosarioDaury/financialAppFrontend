@@ -82,7 +82,7 @@ const Home = ({navigation}) => {
                         <View style={{...Styles.lastestIncome, alignItems: 'center', gap: 10}}>
                             <View style={{width: '70%', alignSelf: 'flex-end'}}>
                                 <Button 
-                                    color={'#ffffff1a'} 
+                                    color={StandardTheme.Green} 
                                     text="Deposit" 
                                     action={() => {
                                         setShowModalIncome(true)
@@ -103,30 +103,12 @@ const Home = ({navigation}) => {
                         </View>
                     </View>
 
-                    <View style={Styles.incomeTrackContainer}>
-                        <View style={Styles.incomeTrack}>
-                            <View style={Styles.Income}>
-                                <Text style={Styles.Income.text}>Income</Text>
-                                <Text style={Styles.Income.amount}>{formatCurrency({amount: IncomeTotal.amount, decimals: true})}</Text>
-                            </View>
-
-                            <View style={{backgroundColor: StandardTheme.Grey, borderBottomColor: StandardTheme.Grey, borderWidth: .5, width: '100%', height: 1}} />
-
-                            <View style={Styles.Outcome}>
-                                <Text style={Styles.Outcome.text}>Outcome</Text>
-                                <Text style={Styles.Outcome.amount}>{formatCurrency({amount: OutcomeTotal.amount, decimals: true})}</Text>
-                            </View>
-                        </View>
-                    </View>
-                </View>
-
-
-                <View style={{...Styles.chartContainer, width: '88%', marginTop: 140, marginBottom: 10}}>
-                            <Text style={Styles.chartTitle}>Incomes vs Expenses</Text>
+                    <View style={{...Styles.chartContainer, width: '88%', marginBottom: 50}}>
+                            <Text style={Styles.chartTitle}>Incomes VS Expenses</Text>
                             <PieChart
                                 data={dataPie}
                                 width={Dimensions.get('window').width - 70}
-                                height={140}
+                                height={170}
                                 chartConfig={{
                                     backgroundColor: '#041E42',
                                     backgroundGradientFrom: '#041E42',
@@ -141,25 +123,28 @@ const Home = ({navigation}) => {
                                 backgroundColor={"transparent"}
                                 paddingLeft={"0"}
                             />
-                </View>
-
-
-                <View style={{marginTop: 50, alignItems: 'center', gap: 20}}>
-                    <View style={{ width: '80%', flexDirection: 'row', justifyContent: 'space-between'}}>
-                        <Text style={{fontSize: 16, fontWeight: 'bold', color: StandardTheme.DarkBlue}}>Incomes</Text>
                     </View>
-                    <IncomeCardsSlider/>
-                </View>
 
-                <View style={{width: '100%', marginTop: 30, alignItems: 'center', gap: 20}}>
-                    <View style={{ width: '80%', flexDirection: 'row', justifyContent: 'space-between'}}>
-                        <Text style={{fontSize: 16, fontWeight: 'bold', color: StandardTheme.DarkBlue}}>Expenses</Text>
+                    <View style={Styles.incomeTrackContainer}>
+                        <View style={Styles.incomeTrack}>
+                            <View style={Styles.Income}>
+                                <Text style={Styles.Income.text}>Income</Text>
+                                <Text style={Styles.Income.amount}>+{formatCurrency({amount: IncomeTotal.amount, decimals: true})}</Text>
+                            </View>
+
+                            <View style={{backgroundColor: StandardTheme.Grey, borderBottomColor: StandardTheme.Grey, borderWidth: .5, width: '100%', height: 1}} />
+
+                            <View style={Styles.Outcome}>
+                                <Text style={Styles.Outcome.text}>Outcome</Text>
+                                <Text style={Styles.Outcome.amount}>-{formatCurrency({amount: OutcomeTotal.amount, decimals: true})}</Text>
+                            </View>
+                        </View>
                     </View>
-                    <OutcomeCardsSlider />
+
                 </View>
 
-                <View style={{...Styles.chartContainer, marginBottom: 100}}>
-                    <Text style={{...Styles.chartTitle, marginBottom: 10}}>Category's Limit Tracking</Text>
+                <View style={{...Styles.chartContainer, marginTop: 130, paddingVertical: 50}}>
+                    <Text style={{...Styles.chartTitle, marginBottom: 40}}>Category's Limit Tracking</Text>
                     {
                         Object.keys(dataChart).length > 0 
                         ?
@@ -174,14 +159,28 @@ const Home = ({navigation}) => {
                                     color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
                                     strokeWidth: 2,
                                     style:{
-                                        borderRadius: 10
                                     }
                                 }}
                             />
                         : null
                     }
                     
-                </View>                
+                </View>  
+
+
+                <View style={{marginTop: 50, alignItems: 'center', gap: 20}}>
+                    <View style={{ width: '80%', flexDirection: 'row', justifyContent: 'space-between'}}>
+                        <Text style={{fontSize: 16, fontWeight: 'bold', color: StandardTheme.DarkBlue}}>Incomes</Text>
+                    </View>
+                    <IncomeCardsSlider/>
+                </View>
+
+                <View style={{width: '100%', marginTop: 30, marginBottom: 120, alignItems: 'center', gap: 20}}>
+                    <View style={{ width: '80%', flexDirection: 'row', justifyContent: 'space-between'}}>
+                        <Text style={{fontSize: 16, fontWeight: 'bold', color: StandardTheme.DarkBlue}}>Expenses</Text>
+                    </View>
+                    <OutcomeCardsSlider />
+                </View>
 
             </ScrollView>
                     
@@ -190,6 +189,8 @@ const Home = ({navigation}) => {
                 setShowModal={setShowModalIncome}
                 afterCreateIncome={() => {
                     Alert.alert('New Income Created')
+                    fetchTransactionTotals()
+                    fetchCategoriesChart()
                 }}
             />
 

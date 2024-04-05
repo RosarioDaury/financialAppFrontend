@@ -88,7 +88,7 @@ export const PagesCreateForm = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         gap: 15,
-        marginVertical: 35,
+        marginTop: 20,
     },  
     IconContainer: {
         borderColor: StandardTheme.White,

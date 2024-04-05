@@ -55,7 +55,10 @@ const IncomeCreateForm =  ({showModal, setShowModal, afterCreateIncome}) => {
             <ScrollView style={SimpleCreateForm.Container}>
 
                     <Pressable
-                        onPress={() => setShowModal(false)}
+                        onPress={() => {
+                            setShowModal(false);
+                            setIncome(defaultIncomeValue);
+                        }}
                         style={SimpleCreateForm.Header}
                     >
                         <AntDesign name="down" size={30} color={StandardTheme.White}/>
