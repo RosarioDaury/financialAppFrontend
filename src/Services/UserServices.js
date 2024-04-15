@@ -7,16 +7,21 @@ class UserServices {
     }
 
     GetUser = async ({token}) => {
+        console.log(`${BASE_URL}/user/get`)
         const data = await axios.get(`${BASE_URL}/user/get`, {headers: {token}});
+        console.log(data)
         return data;
     }
 
     GetUserTypes = async () => {
+        console.log(`${BASE_URL}/user/get/types`)
         const {success, data, error} = await axios.get(`${BASE_URL}/user/get/types`);
+        console.log(success, data, error)
         return {success, data, error}
     }
 
     AuthUser = (body) => {
+        console.log(`${BASE_URL}/user/get/types`)
         return new Promise(
             function (resolve, reject) {
                 axios.post(`${BASE_URL}/user/auth`, body)
@@ -35,12 +40,14 @@ class UserServices {
     }
 
     CreateUser = async (body) => {
+        console.log(`${BASE_URL}/user/create`)
         const data = await axios.post(`${BASE_URL}/user/create`, body);
         return data
     }
 
     updateUser = async ({token, body}) => {
         try{
+            console.log(`${BASE_URL}/user/update`)
             const {data} = await axios.put(`${BASE_URL}/user/update`, body, { headers: {token}});
             return data;
         } catch(error) {

@@ -43,14 +43,14 @@ const Home = ({navigation}) => {
         name: "Income",
         population:  IncomeTotal.amount ?? 0,
         color: StandardTheme.GreenPieChart,
-        legendFontColor: "grey",
+        legendFontColor: "white",
         legendFontSize: 15
         },
         {
         name: "Expenses",
         population: OutcomeTotal.amount ?? 0,
         color: StandardTheme.RedPieChart,
-        legendFontColor: "grey",
+        legendFontColor: "white",
         legendFontSize: 15
         }
     ];
@@ -103,20 +103,17 @@ const Home = ({navigation}) => {
                         </View>
                     </View>
 
-                    <View style={{...Styles.chartContainer, width: '88%', marginBottom: 50}}>
+                    <View style={{...Styles.chartContainer, width: '100%', marginBottom: 50}}>
                             <Text style={Styles.chartTitle}>Incomes VS Expenses</Text>
                             <PieChart
                                 data={dataPie}
                                 width={Dimensions.get('window').width - 70}
                                 height={170}
                                 chartConfig={{
-                                    backgroundColor: '#041E42',
-                                    backgroundGradientFrom: '#041E42',
-                                    backgroundGradientTo: '#041E42',
                                     decimalPlaces: 0,
-                                    color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+                                    color: (opacity = 1) => `rgb(255, 255, 255)`,
                                     style: {
-                                        borderRadius: 10
+                                        borderRadius: 10,
                                     }
                                 }}
                                 accessor={"population"}
@@ -144,20 +141,28 @@ const Home = ({navigation}) => {
                 </View>
 
                 <View style={{...Styles.chartContainer, marginTop: 130, paddingVertical: 50}}>
-                    <Text style={{...Styles.chartTitle, marginBottom: 40}}>Category's Limit Tracking</Text>
+                    <Text style={{...Styles.chartTitle, marginBottom: 40, marginLeft: 25}}>Category's Limit Tracking</Text>
                     {
                         Object.keys(dataChart).length > 0 
                         ?
                             <BarChart
                                 data={dataChart}
                                 width={Dimensions.get('window').width - 40}
-                                height={300}
+                                height={350}
                                 yAxisLabel={'%'}
                                 chartConfig={{
+                                    decimalPlaces: 1,
                                     backgroundGradientFrom: '#041E42',
                                     backgroundGradientTo: '#041E42',
-                                    color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-                                    strokeWidth: 2,
+                                    fillShadowGradientFrom: '#2dc653',
+                                    fillShadowGradientFromOpacity: 1,
+                                    fillShadowGradientTo: '#2dc653',
+                                    fillShadowGradientToOpacity: .1,
+                                    propsForBackgroundLines: {
+                                        opacity: 0
+                                    },
+                                    color: (opacity = 1) => `linear-gradient(180deg, rgba(242,249,253,1) 0%, rgba(4,30,66,1) 100%);`,
+                                    strokeWidth: 5,
                                     style:{
                                     }
                                 }}
@@ -169,14 +174,14 @@ const Home = ({navigation}) => {
 
 
                 <View style={{marginTop: 50, alignItems: 'center', gap: 20}}>
-                    <View style={{ width: '80%', flexDirection: 'row', justifyContent: 'space-between'}}>
+                    <View style={{ width: '90%', flexDirection: 'row', justifyContent: 'space-between'}}>
                         <Text style={{fontSize: 16, fontWeight: 'bold', color: StandardTheme.DarkBlue}}>Incomes</Text>
                     </View>
                     <IncomeCardsSlider/>
                 </View>
 
                 <View style={{width: '100%', marginTop: 30, marginBottom: 120, alignItems: 'center', gap: 20}}>
-                    <View style={{ width: '80%', flexDirection: 'row', justifyContent: 'space-between'}}>
+                    <View style={{ width: '90%', flexDirection: 'row', justifyContent: 'space-between'}}>
                         <Text style={{fontSize: 16, fontWeight: 'bold', color: StandardTheme.DarkBlue}}>Expenses</Text>
                     </View>
                     <OutcomeCardsSlider />

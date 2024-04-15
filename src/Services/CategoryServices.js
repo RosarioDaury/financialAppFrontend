@@ -8,6 +8,7 @@ class CategoryServices {
     }
 
     GetCategories = async ({token, filters}) => {
+        console.log(`${this.BASE_URL}/category/get${generateQueryString(filters)}`)
         return await axios.get(
             `${this.BASE_URL}/category/get${generateQueryString(filters)}`,
             {
@@ -19,10 +20,12 @@ class CategoryServices {
     }
 
     createCategory = async ({body, token}) => {
+        console.log(`${this.BASE_URL}/category/create`)
         return await axios.post(`${this.BASE_URL}/category/create`, body, {headers: {token}})
     }
 
     deleteCategory = async ({id, token}) => {
+        console.log(`${this.BASE_URL}/category/delete/${id}`)
         return await axios.delete(`${this.BASE_URL}/category/delete/${id}`, {headers: {token}})
     }
 }

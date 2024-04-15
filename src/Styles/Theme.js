@@ -8,7 +8,7 @@ export const StandardTheme = {
     White: 'white',
     Golden: '#FFC72C',
     Yellow: '#FFC72C',
-    GreenPieChart: '#1a7431',
+    GreenPieChart: '#2dc653',
     RedPieChart: '#8080808c',
     Purple: "#6420AA"
 }

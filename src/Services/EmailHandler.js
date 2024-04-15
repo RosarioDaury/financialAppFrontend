@@ -9,6 +9,7 @@ class EmailHandler {
     }
 
     SendEmail = async ({body}) => {
+        console.log(`${this.BASE_URL}/email/send`)
         const token = await AsyncStorage.getItem('token')
         let user = JWT.decode(token, SECRET_KEY, {timeSkew: 30});
         body.to = user.email;

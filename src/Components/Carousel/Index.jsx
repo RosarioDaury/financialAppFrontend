@@ -23,6 +23,7 @@ const styles = StyleSheet.create({
     carouselContainer: {
       width: '100%',
       alignSelf: 'center',
+      marginTop: 20
     },
     carouselItem: {
       justifyContent: 'center',

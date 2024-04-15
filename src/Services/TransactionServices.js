@@ -8,6 +8,7 @@ class TransactionServices {
     }
 
     GetTransactions = async ({token, filters}) => {
+        console.log(`${this.BASE_URL}/transaction/get${generateQueryString(filters)}`)
         return await axios.get(
             `${this.BASE_URL}/transaction/get${generateQueryString(filters)}`,
             {
@@ -19,12 +20,14 @@ class TransactionServices {
     }
 
     GetTransactionTypes = async () => {
+        console.log(`${this.BASE_URL}/transaction/types`)
         return await axios.get(
             `${this.BASE_URL}/transaction/types`
         )
     }
 
     GetTransactionsByType = async ({type, token, filters}) => {
+        console.log(`${this.BASE_URL}/transaction/get/type/${type}${generateQueryString(filters)}`)
         return await axios.get(
             `${this.BASE_URL}/transaction/get/type/${type}${generateQueryString(filters)}`,
             {
@@ -36,6 +39,7 @@ class TransactionServices {
     }
 
     GetTransactionsByCategory = async ({type, token, filters}) => {
+        console.log(`${this.BASE_URL}/transaction/get/category/${type}${generateQueryString(filters)}`)
         return await axios.get(
             `${this.BASE_URL}/transaction/get/category/${type}${generateQueryString(filters)}`,
             {
@@ -47,6 +51,7 @@ class TransactionServices {
     }
 
     GetTransactionsTotals = async ({token}) => {
+        console.log(`${this.BASE_URL}/transaction/types/total`)
         return await axios.get(
             `${this.BASE_URL}/transaction/types/total`,
             {
@@ -64,6 +69,7 @@ class TransactionServices {
         // "amount" : "",
         // "type_id" : "",
         // "category_id" : ""
+        console.log(`${this.BASE_URL}/transaction/create`)
         return await axios.post(`${this.BASE_URL}/transaction/create`, body, {headers: {token}})
     }
 

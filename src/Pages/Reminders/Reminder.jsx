@@ -140,7 +140,7 @@ export default function Reminders({navigation}) {
                         }}
                     />
                 :
-                error
+                error == null
                 ?
                     null
                 :

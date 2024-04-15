@@ -89,6 +89,5 @@ export const Styles = StyleSheet.create({
         fontSize: FontSizes.normal,
         marginBottom: 20,
         alignSelf: 'flex-start',
-        marginLeft: 20
     }
 })
